@@ -1,0 +1,84 @@
+.main-bg {
+  background-color: #112861;
+}
+
+.secondary-bg {
+  background-color: #ffffff;
+  color: #112861;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900|Montserrat:400,700');
+}
+
+h1, h2, h3, h4, h5, h6, p, .btn, .form-control, .list-inline, small, {
+  font-family: 'Montserrat';
+  font-size: 100px;
+}
+
+.button {
+	display: block;
+  width: 100px;
+  max-width: 50%;
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+  overflow: hidden;
+  position: relative;
+  transform: translatez(0);
+  text-decoration: none;
+  box-sizing: border-box;
+  font-size: 24px;
+	font-weight: normal;
+	box-shadow: 0 9px 18px rgba(0,0,0,0.2);
+}
+
+.instagram {
+	text-align: center;
+	border-radius: 50px;
+  padding: 26px;
+  color: #112861;
+  background: #ffffff;
+  transition: all 0.2s ease-out 0s;
+}
+
+.gradient {
+	display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  bottom: auto;
+  margin: auto;
+  z-index: -1;
+  background: radial-gradient(90px circle at top center, rgba(189,208,255,.8) 30%, rgba(255,255,255,0));
+  transition: all 0s ease-out 0s;
+	transform: translatex(-140px);
+	animation: 18s linear 0s infinite move;
+}
+
+@keyframes move {
+	0% {
+		transform: translatex(-140px);
+	}
+	25% {
+		transform: translatex(140px);
+		opacity: 0.3;
+	}
+	50% {
+		transform: translatex(140px);
+		opacity: 1;
+		background: radial-gradient(90px circle at bottom center, rgba(189,208,255,.8) 30%, rgba(255,255,255,0));
+	}
+	75% {
+		transform: translatex(-140px);
+		opacity: 0.3;
+	}
+	100% {
+		opacity: 1;
+		transform: translatex(-140px);
+		background: radial-gradient(90px circle at top center, rgba(189,208,255,.8) 30%, rgba(255,255,255,0));
+	}
+}
