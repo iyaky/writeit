@@ -44,7 +44,7 @@ h3 {
   color: white;
 }
 
-body, .regular-text {
+.regular-text {
   font-family: 'Open Sans', sans-serif;
   font-size: 27px;
 }
@@ -202,6 +202,29 @@ body, .regular-text {
   margin-bottom: 2em;
 }
 
+.reg-label {
+  font-family: 'Kanit', sans-serif;
+  font-weight:400;
+  color: white;
+  text-decoration: none;
+  text-align: right;
+}
+
+.reg-field {
+  font-family: 'Kanit', sans-serif;
+  font-weight:400;
+  color: #112861;
+  text-decoration: none;
+}
+
+.reg-field-error {
+  font-family: 'Kanit', sans-serif;
+  font-weight:200;
+  color: white;
+  text-decoration: none;
+  padding-bottom: 0;
+
+}
 
 /* Desktops */
 @media only screen and (min-width: 993px) {
@@ -216,6 +239,18 @@ body, .regular-text {
 
   .blog-body {
     font-size: 1em;
+  }
+
+  .reg-label {
+    font-size: 1em;
+  }
+
+  .reg-field {
+    font-size: 1em;
+  }
+
+  .reg-field-error {
+    font-size: 0.2em;
   }
 
 }
@@ -234,6 +269,18 @@ body, .regular-text {
     font-size: 1em;
   }
 
+  .reg-label {
+    font-size: 1em;
+  }
+
+  .reg-field {
+    font-size: 1em;
+  }
+
+  .reg-field-error {
+    font-size: 0.2em;
+  }
+
 }
 /* Smartphones Landscape & Portrait */
 @media only screen and (max-width: 768px) {
@@ -250,6 +297,18 @@ body, .regular-text {
     font-size: 0.5em;
   }
 
+  .reg-label {
+    font-size: 0.5em;
+  }
+
+  .reg-field {
+    font-size: 0.5em;
+  }
+
+  .reg-field-error {
+    font-size: 0.2em;
+  }
+
 }
 /* Smartphones Portrait */
 @media only screen and (max-width: 540px) {
@@ -264,6 +323,18 @@ body, .regular-text {
 
   .blog-body {
     font-size: 0.5em;
+  }
+
+  .reg-label {
+    font-size: 0.5em;
+  }
+
+  .reg-field {
+    font-size: 0.5em;
+  }
+
+  .reg-field-error {
+    font-size: 0.2em;
   }
 
 }

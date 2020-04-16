@@ -20,11 +20,15 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import news.views
 import home.views
+import register.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home.views.home, name='home'),
     path('news/', include('news.urls')),
+    path("register/", register.views.register, name="register"),
+    path('', include("django.contrib.auth.urls")),
+    path("login/", register.views.login, name="login"),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

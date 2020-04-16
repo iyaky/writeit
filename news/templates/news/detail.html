@@ -25,10 +25,15 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link a-btn small-head-text-second" href="{% url 'home' %}">Home</a>
-          <a class="nav-item nav-link a-btn small-head-text-second active" href="{% url 'news' %}">Blog</a>
-          <a class="nav-item nav-link a-btn small-head-text-second" href="#">Login</a>
+        <div class="navbar-nav ml-auto">
+          <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
+          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
+
+          {% if user.is_authenticated %}
+            <span class="nav-item nav-link small-head-text">Hi, {{request.user.username}}</span>
+          {% else %}
+            <a class="nav-item nav-link a-btn small-head-text" href="{% url 'login' %}">Login</a>
+          {% endif %}
         </div>
       </div>
     </nav>

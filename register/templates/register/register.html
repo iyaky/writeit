@@ -27,46 +27,41 @@
       <div class="navbar-nav ml-auto">
         <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
         <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
-
-        {% if user.is_authenticated %}
-          <span class="nav-item nav-link small-head-text">Hi, {{request.user.username}}</span>
-        {% else %}
-          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'login' %}">Login</a>
-        {% endif %}
       </div>
     </div>
   </nav>
 
-    <div class="main-bg text-white p-5 text-center w-100">
-      <div class="pt-5 mt-5">
-        <h1 class="pt-5 mt-5">Welcome to WriteIT!</h1>
-        <p>WriteIT is the tool you never knew you needed to learn English.</p>
-        <div class="mt-5 mb-5 pt-4 pb-4 ">
-          <a href="#" class="button instagram w-50 a-btn small-head-text"><span class="gradient"></span>Let's Go!</a>
+  <div class="main-bg text-white p-5 w-100">
+    <h2 class="pt-5 pb-3 text-center">Create an account</h2>
+    <div class="container">
+      <form method="POST" class="container form-group">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-2">
+          <label class="reg-label d-flex justify-content-center">{{ field.label }}</label>
+          <div class="d-flex justify-content-center "><span class="reg-field">{{ field }}</span></div>
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <p  class="reg-field-error d-flex justify-content-center">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
-      </div>
-    </div>
+        {% endfor %}
+        <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Join!</button>
+      </form>
 
-    <div class="secondary-bg m-5 p-5 row">
-      <div class="pb-2 m-2 col container container-small">
-        <h2>Step 1</h2>
-        <p>Register your account.</p>
-      </div>
-      <div class="pb-2 m-2 col container container-small">
-        <h2>Step 2</h2>
-        <p>Beat challenges and earn badges.</p>
-      </div>
-      <div class="pb-2 m-2 col container container-small">
-        <h2>Step 3</h2>
-        <p>Learn something!</p>
-      </div>
-    </div>
+      <div class="container d-flex justify-content-center">
+        <p>Already have an account? <a href="{% url 'login' %}">Log in!</a></p>
 
-    <footer class="main-bg text-white mt-5 p-5 text-center">
-      <div class="container text-center">
+      </div>
+
+    </div>
+  </div>
+  <footer class="secondary-bg p-5 text-center">
+    <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>
-    </footer>
+  </footer>
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
