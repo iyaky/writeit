@@ -34,6 +34,7 @@
   <div class="main-bg text-white p-5 w-100">
     <h2 class="pt-5 pb-3 text-center">Log into your account</h2>
     <div class="container">
+      <a href="{% url "social:begin" "google" %}">Login with Google</a>
       <form method="POST" class="container form-group">
         {% csrf_token %}
         {% for field in form %}
@@ -52,7 +53,6 @@
 
       <div class="container d-flex justify-content-center">
         <p>Don't have an account? <a href="{% url 'register' %}">Register!</a></p>
-
       </div>
 
     </div>
