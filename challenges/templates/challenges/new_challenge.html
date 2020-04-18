@@ -27,44 +27,28 @@
       <div class="navbar-nav ml-auto">
         <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
         <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
       </div>
     </div>
   </nav>
 
-  <div class="main-bg text-white p-5 w-100">
-    <h2 class="pt-5 pb-3 text-center">Create an account</h2>
-    <div class="container">
-      <form method="POST" class="container form-group">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="mb-2">
-          <label class="reg-label d-flex justify-content-center">{{ field.label }}</label>
-          <div class="d-flex justify-content-center "><span class="reg-field">{{ field }}</span></div>
-          {% if field.errors %}
-            {% for error in field.errors %}
-              <p  class="reg-field-error d-flex justify-content-center">{{ error }}</p>
-            {% endfor %}
-          {% endif %}
-        </div>
-        {% endfor %}
-        <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Join!</button>
-      </form>
 
-      <div class="container d-flex justify-content-center">
-        <p>Already have an account? <a href="{% url 'login' %}">Log in!</a></p>
-
+    <div class="secondary-bg p-5 container">
+      <h2 class="text-center p-5">Start a Challenge</h2>
+      <div class="container">
+        <p>display form to create a challenge (name, topic, short description, desired number of checks, urgency, text)</p>
       </div>
-
     </div>
-  </div>
+
   <footer class="secondary-bg p-5 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>
   </footer>
 
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
 </body>
-</html>

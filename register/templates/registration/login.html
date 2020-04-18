@@ -26,7 +26,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
         <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
-        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
       </div>
     </div>
   </nav>
@@ -34,7 +34,6 @@
   <div class="main-bg text-white p-5 w-100">
     <h2 class="pt-5 pb-3 text-center">Log into your account</h2>
     <div class="container">
-      <a href="{% url "social:begin" "google" %}">Login with Google</a>
       <form method="POST" class="container form-group">
         {% csrf_token %}
         {% for field in form %}

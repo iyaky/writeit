@@ -20,25 +20,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
-import news.views
 import home.views
 import register.views
+import challenges.views
+import badges.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("django.contrib.auth.urls")),
     path('', home.views.home, name='home'),
-    path('news/', include('news.urls')),
+    path('about/', include('home.urls')),
     path("register/", register.views.usersignup, name="register"),
     path("login/", register.views.login, name="login"),
-    url('accounts/', include('social_django.urls', namespace='social')),
-    #path('accounts/', include('register.urls')),
+    #url('accounts/', include('social_django.urls', namespace='social')),
+    path('accounts/', include('register.urls')),
+    path('challenges/', challenges.views.challenges, name="challenges"),
+    path('new_challenge/', challenges.views.new_challenge, name="new_challenge"),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         register.views.activate_account, name='activate'),
-    path('accounts/profile/',
-         TemplateView.as_view(template_name='accounts/profile.html'),
-         name='profile'),
-    path(r'^accounts/profile/settings/$', register.views.settings, name="profile_settings"),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

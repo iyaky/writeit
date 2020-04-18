@@ -27,10 +27,10 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
           <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
-          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
+          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
 
           {% if user.is_authenticated %}
-            <span class="nav-item nav-link small-head-text">Hi, {{request.user.username}}</span>
+            <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
           {% else %}
             <a class="nav-item nav-link a-btn small-head-text" href="{% url 'login' %}">Login</a>
           {% endif %}
@@ -42,25 +42,20 @@
   <main role="main">
     <div class="row">
 
-      <aside class="col-3 sidebar">
+      <aside class="col-3 sidebar p-5">
         <nav class="nav-sidebar">
           <ul>
-            <li><a class="a-sidebar active-sidebar" href="#">Welcome</a></li>
-            <li><a class="a-sidebar" href="#">Who We Are</a></li>
-            <li><a class="a-sidebar" href="#">What We Do</a></li>
-            <li><a class="a-sidebar" href="#">Get In Touch</a></li>
+            <li><a class="a-sidebar" href="{% url 'about' %}">Welcome</a></li>
+            <li><a class="a-sidebar" href="{% url 'who_we_are' %}">Who We Are</a></li>
+            <li><a class="a-sidebar active-sidebar" href="{% url 'what_we_do' %}">What We Do</a></li>
+            <li><a class="a-sidebar" href="{% url 'get_in_touch' %}">Get In Touch</a></li>
           </ul>
         </nav>
       </aside>
 
       <div class="col-9 secondary-bg p-5">
         <div class="container">
-          <h1 class="text-center pt-5">{{news.title}}</h1>
-          <img class="img-responsive bd-placeholder-img img-fluid" src="{{ news.image.url }}" />
-          <div>
-            <p class="blog-date">{{ news.posted_date }}</p>
-            <p class="blog-body">{{ news.body }}</p>
-          </div>
+          <h1 class="text-center pt-5">What We Do</h1>
         </div>
       </div>
 

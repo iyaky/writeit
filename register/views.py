@@ -45,10 +45,22 @@ def activate_account(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse('Your account has been activate successfully')
+        return HttpResponse('Your account has been activated successfully!')
     else:
         return HttpResponse('Activation link is invalid!')
 
 @login_required
+def profile(request):
+    return render(request, 'accounts/profile.html')
+
+@login_required
 def settings(request):
     return render(request, 'settings/profile_settings.html')
+
+@login_required
+def my_badges(request):
+    return render(request, 'my_badges/my_badges.html')
+
+@login_required
+def my_challenges(request):
+    return render(request, 'my_challenges/my_challenges.html')

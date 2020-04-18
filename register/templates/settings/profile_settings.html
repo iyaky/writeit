@@ -26,8 +26,8 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
         <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
-        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
-        <span class="nav-item nav-link small-head-text">Hi, {{request.user.email}}</span>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
       </div>
     </div>
   </nav>
@@ -35,8 +35,9 @@
   <div class="container main row">
     <div class="col-5 main-bg text-white p-5">
       <h3 class="title p-5">{{ request.user.username }}</h3>
-      <p><a href="#">Challenges (started, completed, all)</a></p>
-      <p><a href="#">Badges</a></p>
+      <p><a href="{% url 'profile' %}">My Account</a></p>
+      <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
+      <p><a href="{% url 'my_badges' %}">My Badges</a></p>
       <p><a href="{% url 'profile_settings' %}">Settings</a></p>
       <p><a href="/logout">Logout</a></p>
     </div>

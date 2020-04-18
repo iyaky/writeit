@@ -26,10 +26,10 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
         <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
-        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
 
         {% if user.is_authenticated %}
-          <span class="nav-item nav-link small-head-text">Hi, {{request.user.username}}</span>
+          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
         {% else %}
           <a class="nav-item nav-link a-btn small-head-text" href="{% url 'login' %}">Login</a>
         {% endif %}
@@ -42,7 +42,11 @@
         <h1 class="pt-5 mt-5">Welcome to WriteIT!</h1>
         <p>WriteIT is the tool you never knew you needed to learn English.</p>
         <div class="mt-5 mb-5 pt-4 pb-4 ">
-          <a href="#" class="button instagram w-50 a-btn small-head-text"><span class="gradient"></span>Let's Go!</a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="button instagram w-50 a-btn small-head-text"><span class="gradient"></span>Let's Go!</a>
+          {% else %}
+            <a href="{% url 'login' %}" class="button instagram w-50 a-btn small-head-text"><span class="gradient"></span>Let's Go!</a>
+          {% endif %}
         </div>
       </div>
     </div>

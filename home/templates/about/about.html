@@ -5,9 +5,10 @@
   {% load static %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Iryna Yakymets">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Jekyll v3.8.6">
-  <title>News Blog</title>
+  <title>{{ blog.title }}</title>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
@@ -26,10 +27,10 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
           <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
-          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'news' %}">Blog</a>
+          <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
 
           {% if user.is_authenticated %}
-            <span class="nav-item nav-link small-head-text">Hi, {{request.user.username}}</span>
+            <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
           {% else %}
             <a class="nav-item nav-link a-btn small-head-text" href="{% url 'login' %}">Login</a>
           {% endif %}
@@ -40,41 +41,22 @@
 
   <main role="main">
     <div class="row">
-      <aside class="col-3 sidebar">
+
+      <aside class="col-3 sidebar p-5">
         <nav class="nav-sidebar">
           <ul>
-            <li><a class="a-sidebar active-sidebar" href="#">Welcome</a></li>
-            <li><a class="a-sidebar" href="#">Who We Are</a></li>
-            <li><a class="a-sidebar" href="#">What We Do</a></li>
-            <li><a class="a-sidebar" href="#">Get In Touch</a></li>
+            <li><a class="a-sidebar active-sidebar" href="{% url 'about' %}">Welcome</a></li>
+            <li><a class="a-sidebar" href="{% url 'who_we_are' %}">Who We Are</a></li>
+            <li><a class="a-sidebar" href="{% url 'what_we_do' %}">What We Do</a></li>
+            <li><a class="a-sidebar" href="{% url 'get_in_touch' %}">Get In Touch</a></li>
           </ul>
         </nav>
       </aside>
 
       <div class="col-9 secondary-bg p-5">
         <div class="container">
-          <h1 class="text-center pt-3">Blog</h1>
-          <br />
-          <br />
-          <h2>Latest Posts</h2>
-          <hr />
+          <h1 class="text-center pt-5">Welcome to WriteIT</h1>
         </div>
-
-        <div>
-          {% for news in news.all %}
-          <div class="container">
-            <a href="{% url 'detail' news.id %}"><h3 class="card-header secondary-text-color">{{ news.title }}</h3></a>
-            <div class="card mb-3 shadow-sm">
-              <img class="bd-placeholder-img card-img-top img-fluid" width=200 src="{{ news.image.url }}" />
-              <div class="card-body">
-                <p class="blog-date">{{ news.posted_date }}</p>
-                <p class="card-text blog-body">{{ news.body }}</p>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-
       </div>
 
     </div>

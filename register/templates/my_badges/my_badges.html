@@ -32,6 +32,7 @@
     </div>
   </nav>
 
+  {% if user.is_authenticated %}
   <div class="container main row">
     <div class="col-5 main-bg text-white p-5">
       <h3 class="title p-5">{{ request.user.username }}</h3>
@@ -43,21 +44,21 @@
     </div>
 
     <div class="col-7 secondary-bg p-5 container">
-      <h2 class="text-center p-5">Dashboard</h2>
+      <h2 class="text-center p-5">My Badges</h2>
       <div class="container">
         <div class="container">
-          <h3>Streak</h3>
-          <p>n days</p>
-        </div>
-        <div class="container">
-          <h3>Level</h3>
-          <p>pop-up explanation</p>
-          <p>A</p>
-          <p>bar graph</p>
+          <h3>Collected badges</h3>
+          <p>display list of badges</p>
         </div>
       </div>
     </div>
   </div>
+  {% else %}
+  <div class="main main-bg text-white p-5">
+    <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
+    <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
+  </div>
+  {% endif %}
 
   <footer class="secondary-bg p-5 text-center">
     <div class="container text-center">
