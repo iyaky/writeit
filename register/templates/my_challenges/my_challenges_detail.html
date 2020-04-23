@@ -52,8 +52,8 @@
           <p>Additional information - {{ challenge.notes }}</p>
         </div>
         <div class="container">
-          <a href="#">Change challenge</a>
-          <a href="#">Delete challenge</a>
+          <a href="{% url 'change_challenge' challenge.id %}">Change challenge</a>
+          <a href="{% url 'delete_challenge' challenge.id %}">Delete challenge</a>
         </div>
       </div>
 
@@ -98,7 +98,10 @@
         {% if not request.user in challenge.completed_peer_reviewer.all %}
         <div class="container">
           <a href="{% url 'complete_challenge' challenge.id %}">Start challenge</a>
-          <a href="#">Can't participate</a>
+          <form action="{% url 'cant_participate' challenge.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" name="cant_participate">Can't participate</button>
+          </form>
         </div>
         {% else %}
         <div class="container">

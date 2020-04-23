@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, UserUpdateForm, ProfileUpdateForm, CompleteChallenge, FeedbackForm
+from .forms import RegisterForm, UserUpdateForm, ProfileUpdateForm, CompleteChallenge, FeedbackForm, ChangeChallengeForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -132,3 +132,32 @@ def leave_feedback(request, challenge_id):
         form = FeedbackForm(instance=challenge)
 
     return render(request, 'my_challenges/leave_feedback.html', {'form': form, 'challenge': challenge})
+
+@login_required
+def change_challenge(request, challenge_id):
+    challenge = Challenge.objects.get(pk=challenge_id)
+    if request.method == 'POST':
+
+        form = ChangeChallengeForm(request.POST, instance=challenge)
+        if form.is_valid():
+            form.save()
+
+            return redirect('my_challenges_detail', challenge_id=challenge.id)
+    else:
+        form = ChangeChallengeForm(instance=challenge)
+
+    return render(request, 'my_challenges/change_challenge.html', {'form': form, 'challenge': challenge})
+
+@login_required
+def delete_challenge(request, challenge_id):
+    challenge = Challenge.objects.get(pk=challenge_id)
+    challenge.delete()
+
+    return redirect('my_challenges')
+
+@login_required
+def cant_participate(request, challenge_id):
+    challenge = Challenge.objects.get(pk=challenge_id)
+    challenge.peer_reviewer.remove(request.user)
+
+    return redirect('my_challenges')

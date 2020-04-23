@@ -12,4 +12,7 @@ urlpatterns = [
     path('<int:challenge_id>/', views.my_challenges_detail, name='my_challenges_detail'),
     path('<int:challenge_id>/complete_challenge/', views.complete_challenge, name='complete_challenge'),
     path('<int:challenge_id>/leave_feedback/', views.leave_feedback, name='leave_feedback'),
+    path('<int:challenge_id>/cant_participate/', views.cant_participate, name='cant_participate'),
+    path('<int:challenge_id>/change_challenge/', views.change_challenge, name='change_challenge'),
+    path('<int:challenge_id>/delete_challenge/', views.delete_challenge, name='delete_challenge'),
 ]

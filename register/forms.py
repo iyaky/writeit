@@ -55,3 +55,8 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Challenge
         fields = ['feedback']
+
+class ChangeChallengeForm(forms.ModelForm):
+    class Meta:
+        model = Challenge
+        fields = ['deadline', 'number_of_checks', 'notes']
