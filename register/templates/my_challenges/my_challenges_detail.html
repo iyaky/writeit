@@ -1,0 +1,146 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+
+  <title>Welcome to WriteIT!</title>
+  <meta name="description" content="Welcome to WriteIT!">
+  <meta name="author" content="Iryna Yakymets">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+
+
+</head>
+
+<body class="h-100 w-100">
+  <nav class="navbar navbar-expand-lg fixed-top nav-main">
+    <a class="navbar-brand a-btn small-head-text" href="{% url 'home' %}">WriteIT!</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
+      </div>
+    </div>
+  </nav>
+
+  {% if user.is_authenticated %}
+  <div class="container main">
+
+    <div class="secondary-bg p-5 container">
+      <h2><a href="{% url 'my_challenges' %}">My Challenges</a></h2>
+
+      {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
+      <div class="container">
+        <div class="container">
+          <h3>{{ challenge.title }}</h3>
+          <p>Due {{ challenge.deadline }}</p>
+          <p>Topic - {{ challenge.topic }}</p>
+          <p>Short description - {{ challenge.short_description }}</p>
+          <p>Reviewers - {{ challenge.agreed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
+          <p>Reviews - {{ challenge.completed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
+          {% if challenge.peer_review_text == Null %}<p>Text - {{ challenge.auto_check_text }}</p>
+          {% else %}<p>Text - {{ challenge.peer_review_text }}</p>{% endif %}
+          <p>Additional information - {{ challenge.notes }}</p>
+        </div>
+        <div class="container">
+          <a href="#">Change challenge</a>
+          <a href="#">Delete challenge</a>
+        </div>
+      </div>
+
+      {% elif challenge.challenge_starter == request.user and challenge.status == "Completed" %}
+      <div class="container">
+        <div class="container">
+          <h3>{{ challenge.title }}</h3>
+          <p>Completed on {{ challenge.date_completed }}</p>
+          <p>Topic - {{ challenge.topic }}</p>
+          <p>Short description - {{ challenge.short_description }}</p>
+          <p>Reviewers - {{ challenge.agreed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
+          <p>Reviews - {{ challenge.completed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
+          {% if challenge.peer_review_text == Null %}<p>Text - {{ challenge.auto_check_text }}</p>
+          {% else %}<p>Text - {{ challenge.peer_review_text }}</p>{% endif %}
+          <p>Additional information - {{ challenge.notes }}</p>
+        </div>
+        {% if challenge.feedback == "" %}
+        <div class="container">
+          <a href="{% url 'leave_feedback' challenge.id %}">Leave feedback</a>
+        </div>
+        {% else %}
+        <div class="container">
+          <h4>Thank's for your feedback!</h4>
+          <a href="{% url 'my_challenges' %}">Back</a>
+        </div>
+        {% endif %}
+      </div>
+
+      {% elif challenge.status == "Started" %}
+      <div class="container">
+        <div class="container">
+          <h3>{{ challenge.title }}</h3>
+          <p>Due {{ challenge.deadline }}</p>
+          <p>Topic - {{ challenge.topic }}</p>
+          <p>Short description - {{ challenge.short_description }}</p>
+          <p>Reviews - {{ challenge.completed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
+          {% if challenge.peer_review_text == Null %}<p>Text - {{ challenge.auto_check_text }}</p>
+          {% else %}<p>Text - {{ challenge.peer_review_text }}</p>{% endif %}
+          <p>Additional information - {{ challenge.notes }}</p>
+        </div>
+
+        {% if not request.user in challenge.completed_peer_reviewer.all %}
+        <div class="container">
+          <a href="{% url 'complete_challenge' challenge.id %}">Start challenge</a>
+          <a href="#">Can't participate</a>
+        </div>
+        {% else %}
+        <div class="container">
+          <h4>All done here! Thanks for doing your part!</h4>
+          <a href="{% url 'my_challenges' %}">Back</a>
+        </div>
+        {% endif%}
+      </div>
+
+      {% elif challenge.status == "Completed" %}
+      <div class="container">
+        <h3>{{ challenge.title }}</h3>
+        <p>Completed on {{ challenge.date_completed }}</p>
+        <p>Topic - {{ challenge.topic }}</p>
+        <p>Short description - {{ challenge.short_description }}</p>
+        <p>Reviews - {{ challenge.completed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
+        {% if challenge.peer_review_text == Null %}<p>Text - {{ challenge.auto_check_text }}</p>
+        {% else %}<p>Text - {{ challenge.peer_review_text }}</p>{% endif %}
+        <p>Additional information - {{ challenge.notes }}</p>
+      </div>
+      <div class="container">
+        <a href="{% url 'my_challenges' %}">Back</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <div class="main main-bg text-white p-5">
+    <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
+    <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
+  </div>
+  {% endif %}
+
+  <footer class="secondary-bg p-5 text-center">
+    <div class="container text-center">
+      <p>© Iryna Yakymets {% now "Y" %}</p>
+    </div>
+  </footer>
+
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+</body>

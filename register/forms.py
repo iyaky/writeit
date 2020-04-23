@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Profile
+from challenges.models import Challenge
 
 
 class RegisterForm(UserCreationForm):
@@ -31,3 +33,25 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'country', 'photo']
+
+class CompleteChallenge(forms.ModelForm):
+    class Meta:
+        model = Challenge
+        fields = ['peer_review_text']
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Challenge
+        fields = ['feedback']

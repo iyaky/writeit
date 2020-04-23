@@ -35,8 +35,22 @@
 
     <div class="secondary-bg p-5 container">
       <h2 class="text-center p-5">Challenges</h2>
+      <h3> <a href="{% url 'new_challenge' %}">Start a challenge</a> </h3>
+      <h3><a href="{% url 'my_challenges' %}">My Challenges</a></h3
       <div class="container">
-        <p>display all challenges in seperate containers. open each challenge in a separate page. apply filter. search</p>
+        {% for challenge in challenges.all %}
+          {% if challenge.agreed_number_of_checks < challenge.number_of_checks %}
+              <div class="container">
+                <a href="{% url 'challenge_detail' challenge.id %}"><h3 class="card-header">{{ challenge.title }}</h3></a>
+                <div class="card mb-4 shadow-sm">
+                  <div class="card-body">
+                    <p>{{ challenge.topic }}</p>
+                    <p class="card-text">{{ challenge.short_description }}</p>
+                  </div>
+                </div>
+              </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
 

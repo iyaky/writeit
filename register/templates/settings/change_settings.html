@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+
+  <title>Welcome to WriteIT!</title>
+  <meta name="description" content="Welcome to WriteIT!">
+  <meta name="author" content="Iryna Yakymets">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+
+
+</head>
+
+<body class="h-100 w-100">
+  <nav class="navbar navbar-expand-lg fixed-top nav-main">
+    <a class="navbar-brand a-btn small-head-text" href="{% url 'home' %}">WriteIT!</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link a-btn small-head-text active" href="{% url 'home' %}">Home</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'about' %}">About</a>
+        <a class="nav-item nav-link a-btn small-head-text" href="{% url 'profile' %}">Hi, {{request.user.username}}</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container main row">
+    <div class="col-3 main-bg text-white p-5">
+      <h3 class="title p-5">{{ request.user.username }}</h3>
+      <p><a href="{% url 'profile' %}">My Account</a></p>
+      <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
+      <p><a href="{% url 'my_badges' %}">My Badges</a></p>
+      <p><a href="{% url 'profile_settings' %}">Settings</a></p>
+      <p><a href="/logout">Logout</a></p>
+    </div>
+
+    <div class="col-9 secondary-bg p-5 container">
+      <h2 class="text-center p-5">Change Settings</h2>
+      <div class="container">
+        <form method="POST" class="container form-group" enctype = "multipart/form-data">
+          {% csrf_token %}
+          {% for field in u_form %}
+          <div class="mb-2">
+            <label class="reg-label">{{ field.label }}</label>
+            <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p  class="reg-field-error">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% for field in p_form %}
+          <div class="mb-2">
+            <label class="reg-label">{{ field.label }}</label>
+            <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p  class="reg-field-error">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Save!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="secondary-bg text-center">
+    <div class="container text-center">
+      <p>© Iryna Yakymets {% now "Y" %}</p>
+    </div>
+  </footer>
+
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+</body>

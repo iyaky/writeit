@@ -35,6 +35,7 @@
   <div class="container main row">
     <div class="col-5 main-bg text-white p-5">
       <h3 class="title p-5">{{ request.user.username }}</h3>
+      <img class="img-fluid img-thumbnail rounded-circle" style="min-height:200px;height:200px;" src="{{ request.user.profile.photo.url }}" alt="profile_photo">
       <p><a href="{% url 'profile' %}">My Account</a></p>
       <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
       <p><a href="{% url 'my_badges' %}">My Badges</a></p>

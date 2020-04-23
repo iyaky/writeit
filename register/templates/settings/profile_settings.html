@@ -33,7 +33,7 @@
   </nav>
 
   <div class="container main row">
-    <div class="col-5 main-bg text-white p-5">
+    <div class="col-3 main-bg text-white p-5">
       <h3 class="title p-5">{{ request.user.username }}</h3>
       <p><a href="{% url 'profile' %}">My Account</a></p>
       <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
@@ -42,22 +42,59 @@
       <p><a href="/logout">Logout</a></p>
     </div>
 
-    <div class="col-7 secondary-bg p-5 container">
+    <div class="col-9 secondary-bg p-5 container">
       <h2 class="text-center p-5">Settings</h2>
       <div class="container">
         <div class="container">
-          <h3>Change profile details</h3>
-          <p>name, last name, profile pic, email, password change</p>
+          <h3>Profile Details</h3>
+          <div class="container">
+            <h5>Username</h5>
+            <p>{{request.user.username}}</p>
+          </div>
+          <div class="container">
+            <h5>Name</h5>
+            {% if requst.user.first_name == Null %}
+            <p>First name</p>
+            <p>Nothing here yet!</p>
+            {% else %}
+              <p>First name</p>
+              <p>{{request.user.first_name}}</p>
+            {% endif %}
+            {% if requst.user.last_name == Null %}
+            <p>Last name</p>
+            <p>Nothing here yet!</p>
+            {% else %}
+              <p>Last name</p>
+              <p>{{request.user.last_name}}</p>
+            {% endif %}
+          </div>
+          <div class="container">
+            <h5>Profile Picture</h5>
+            <img class="img-fluid" style="min-height:170px;height:170px;" src="{{ request.user.profile.photo.url }}" alt="profile_photo">
+          </div>
+          <div class="container">
+            <h5>Bio</h5>
+            <p>{{request.user.profile.bio}}</p>
+          </div>
+          <div class="container">
+            <h5>Email</h5>
+            <p>{{request.user.email}}</p>
+          </div>
+          <div class="container">
+            <h5>Location</h5>
+            <p>{{request.user.profile.country}}</p>
+          </div>
         </div>
         <div class="container">
-          <h3>Delete account</h3>
-          <p>Delete account option</p>
+          <a href="{% url 'change_settings' %}">Update profile settings</a>
+          <h4>Delete Profile</h4>
+          <a>Delete profile</a>
         </div>
       </div>
     </div>
   </div>
 
-  <footer class="secondary-bg p-5 text-center">
+  <footer class="secondary-bg text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

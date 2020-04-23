@@ -34,7 +34,7 @@
 
   {% if user.is_authenticated %}
   <div class="container main row">
-    <div class="col-5 main-bg text-white p-5">
+    <div class="col-3 main-bg text-white p-5">
       <h3 class="title p-5">{{ request.user.username }}</h3>
       <p><a href="{% url 'profile' %}">My Account</a></p>
       <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
@@ -43,13 +43,19 @@
       <p><a href="/logout">Logout</a></p>
     </div>
 
-    <div class="col-7 secondary-bg p-5 container">
+    <div class="col-9 secondary-bg p-5 container">
       <h2 class="text-center p-5">My Badges</h2>
       <div class="container">
-        <div class="container">
-          <h3>Collected badges</h3>
-          <p>display list of badges</p>
-        </div>
+        {% for badge in badges.all %}
+          {% if badge.first_login == True %}
+            <p>Earned</p>
+          {% endif %}
+          {% if badge.one_challenge == True %}
+            <p>Earned</p>
+          {% else %}
+            <p>Pending</p>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
