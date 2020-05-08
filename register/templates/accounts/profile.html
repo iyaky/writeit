@@ -36,7 +36,6 @@
     <div class="col-5 main-bg text-white p-5">
       <h3 class="title p-5">{{ request.user.username }}</h3>
       <img class="img-fluid img-thumbnail rounded-circle" style="min-height:200px;height:200px;" src="{{ request.user.profile.photo.url }}" alt="profile_photo">
-      <p><a href="{% url 'profile' %}">My Account</a></p>
       <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
       <p><a href="{% url 'my_badges' %}">My Badges</a></p>
       <p><a href="{% url 'profile_settings' %}">Settings</a></p>
@@ -47,14 +46,17 @@
       <h2 class="text-center p-5">Dashboard</h2>
       <div class="container">
         <div class="container">
-          <h3>Streak</h3>
-          <p>n days</p>
+          <h3>Challenges</h3>
+          <p>{{ count }}</p>
         </div>
         <div class="container">
           <h3>Level</h3>
-          <p>pop-up explanation</p>
-          <p>A</p>
+          <p>{{ profile.level }}</p>
           <p>bar graph</p>
+        </div>
+        <div class="container">
+          <h3>Brownie points</h3>
+          <p>{{ profile.peer_review_points }}</p>
         </div>
       </div>
     </div>

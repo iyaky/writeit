@@ -36,7 +36,8 @@ urlpatterns = [
     path('accounts/', include('register.urls')),
     path('challenges/', include('challenges.urls')),
     #path('challenges/', challenges.views.challenges, name="challenges"),
-    path('new_challenge/', challenges.views.new_challenge, name="new_challenge"),
+    path('plain_text_challenge/', challenges.views.plain_text_challenge, name="plain_text_challenge"),
+    path('file_challenge/', challenges.views.file_challenge, name='file_challenge'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         register.views.activate_account, name='activate'),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

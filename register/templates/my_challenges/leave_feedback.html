@@ -43,6 +43,7 @@
         <h3>{{ challenge.title }}</h3>
         <p>Completed on {{ challenge.date_completed }}</p>
 
+        <p>Please, leave some feedback about your experience. We'd love to hear your thoughts.</p>
         <form  method="POST" class="container form-group" enctype = "multipart/form-data">
           {% csrf_token %}
           {% for field in form %}

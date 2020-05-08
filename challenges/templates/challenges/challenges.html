@@ -35,11 +35,17 @@
 
     <div class="secondary-bg p-5 container">
       <h2 class="text-center p-5">Challenges</h2>
-      <h3> <a href="{% url 'new_challenge' %}">Start a challenge</a> </h3>
-      <h3><a href="{% url 'my_challenges' %}">My Challenges</a></h3
+      <h3> <a href="{% url 'choose_challenge_type' %}">Start a challenge</a> </h3>
+      <h3><a href="{% url 'my_challenges' %}">My Challenges</a></h3>
       <div class="container">
-        {% for challenge in challenges.all %}
-          {% if challenge.agreed_number_of_checks < challenge.number_of_checks %}
+        <form method="get">
+          {{ filter.form.as_p }}
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="container">
+        {% for challenge in filter.qs %}
+          {% if challenge.agreed_number_of_checks < challenge.number_of_checks and challenge.completed_other_challenge and challenge.challenge_starter != request.user and not request.user in challenge.peer_reviewer.all %}
               <div class="container">
                 <a href="{% url 'challenge_detail' challenge.id %}"><h3 class="card-header">{{ challenge.title }}</h3></a>
                 <div class="card mb-4 shadow-sm">

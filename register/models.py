@@ -9,6 +9,7 @@ class Profile(models.Model):
     country = models.CharField(max_length=30, blank=True)
     level = models.CharField(max_length=30, blank=True)
     photo = models.ImageField(upload_to='images/')
+    peer_review_points = models.PositiveIntegerField(blank=True, default=0)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -18,3 +19,10 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class Level(models.Model):
+    level = models.CharField(max_length=30, blank=True)
+
+    def __str__(self):
+        return self.title

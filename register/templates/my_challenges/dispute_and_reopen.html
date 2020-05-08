@@ -33,35 +33,30 @@
   </nav>
 
 
-  <div class="main-bg text-white pt-5 container">
-    <h2 class="text-center p-5">Start a Challenge</h2>
-    <div class="container">
-      <form method="POST" class="container form-group" enctype = "multipart/form-data">
-        {% csrf_token %}
-        {% for field in form %}
-          <div class="mb-2">
-            <label class="reg-label">{{ field.label }}</label>
-            <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
-            {% if field.errors %}
-              {% for error in field.errors %}
-              <p  class="reg-field-error">{{ error }}</p>
-              {% endfor %}
-            {% endif %}
-          </div>
-        {% endfor %}
-
-        <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Create!</button>
-      </form>
-      <a href="{% url 'challenges' %}" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Cancel</a>
+    <div class="secondary-bg p-5 container">
+      <h2 class="text-center p-5">Open a dispute</h2>
+      {% if not challenge.opened_dispute %}
+      <div class="container">
+        <p>Note that you can only open a dispute once! If you are not satisfied with the results after this dispute is closed, please contact our support team.</p>
+        <form  action="{% url 'manage_dispute' challenge.id %}" method="POST" class="container form-group" enctype = "multipart/form-data">
+          {% csrf_token %}
+          <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Open dispute</button>
+        </form>
+      </div>
+      {% else %}
+      <div class="container">
+        <p>Looks like you can't open any more disputes on this challenge. If you have any issues, please contact our support team.</p>
+        <p>Or you can accept the results and close this challenge!</p>
+        <a href="{% url 'accept_and_close_challenge' challenge.id %}">Accept results</a>
+      </div>
+      {% endif %}
     </div>
-  </div>
 
   <footer class="secondary-bg p-5 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>
   </footer>
-
 
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

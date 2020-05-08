@@ -32,52 +32,20 @@
     </div>
   </nav>
 
-  {% if user.is_authenticated %}
-  <div class="container main">
 
     <div class="secondary-bg p-5 container">
-      <h2><a href="{% url 'my_challenges' %}">My Challenges</a></h2>
-
-      {% if challenge.challenge_starter == request.user %}
-      <div class="container">
-        <h3>{{ challenge.title }}</h3>
-        <p>Completed on {{ challenge.date_completed }}</p>
-        <p>Here are the things you can change.</p>
-
-        <form  method="POST" class="container form-group" enctype = "multipart/form-data">
-          {% csrf_token %}
-          {% for field in form %}
-          <div class="mb-2">
-            <label class="">{{ field.label }}</label>
-            <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
-            {% if field.errors %}
-            {% for error in field.errors %}
-            <p  class="reg-field-error">{{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
-          </div>
-          <button onclick="return confirm('Are you sure you want to submit these changes?')" type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Submit changes!</button>
-        </form>
-
-        <a href="{% url 'my_challenges' %}">Back</a>
+      <h2 class="text-center p-5">What kind of challenge would you like to start?</h2>
+      <div class="row">
+        <div class="col-5 m-1">
+          <h3> <a href="{% url 'plain_text_challenge' %}">Plain text challenge</a> </h3>
+          <p>Write your own text on the spot or simply copy it from somewhere else.</p>
+        </div>
+        <div class="col-5 m-1">
+          <h3> <a href="{% url 'file_challenge' %}">File challenge</a> </h3>
+          <p>Upload a file and let us deal with the rest.</p>
+        </div>
       </div>
-      {% else %}
-      <div class="container">
-        <p>Are you sure this is your challenge?</p>
-        <a href="{% url 'my_challenges' %}">Back</a>
-      </div>
-
-      {% endif %}
-
     </div>
-  </div>
-  {% else %}
-  <div class="main main-bg text-white p-5">
-    <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
-    <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
-  </div>
-  {% endif %}
 
   <footer class="secondary-bg p-5 text-center">
     <div class="container text-center">

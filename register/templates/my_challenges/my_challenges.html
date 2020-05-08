@@ -51,7 +51,7 @@
             <h3> <a href="{% url 'challenges' %}">Find a Challenge</a> </h3>
           </div>
           <div class="container">
-            <h3> <a href="{% url 'new_challenge' %}">Start a Challenge</a> </h3>
+            <h3> <a href="{% url 'choose_challenge_type' %}">Start a Challenge</a> </h3>
           </div>
         </div>
         <div class="container">
@@ -59,6 +59,15 @@
           <h4>In progress</h4>
           {% for challenge in my_challenges.all %}
             {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
+
+                <div class="container">
+                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
+                </div>
+            {% endif %}
+          {% endfor %}
+          <h4>Pending</h4>
+          {% for challenge in my_challenges.all %}
+            {% if challenge.challenge_starter == request.user and challenge.status == "Pending" and challenge.completed_other_challenge %}
 
                 <div class="container">
                   <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
@@ -77,12 +86,25 @@
         </div>
         <div class="container">
           <h3>Current challenges</h3>
+          <h4>Pending</h4>
           {% for challenge in challenges.all %}
             {% if challenge.status == "Started" %}
-
+              {% if not request.user in challenge.completed_peer_reviewer.all %}
                 <div class="container">
                   <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
                 </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          <h4>Completed</h4>
+          {% for challenge in challenges.all %}
+            {% if challenge.status == "Started" %}
+              {% if request.user in challenge.completed_peer_reviewer.all %}
+                <div class="container">
+                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
+                </div>
+              {% endif %}
             {% endif %}
           {% endfor %}
         </div>
