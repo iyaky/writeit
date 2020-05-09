@@ -5,6 +5,7 @@ from django.dispatch import receiver
 import datetime
 
 DEFAULT_EXAM_ID=1
+DEFAULT_USER_ID=27
 
 class ChallengeTopicName(models.Model):
 
@@ -24,7 +25,7 @@ class Challenge(models.Model):
     completed_number_of_checks = models.PositiveSmallIntegerField(blank=False, default=0)
     level = models.CharField(max_length=30, blank=True)
     deadline = models.DateField(auto_now=False, auto_now_add=False, blank=False, help_text='Please provide a deadline for the reviews.')
-    challenge_starter = models.ForeignKey(User, related_name="challenge_starter", blank=True, on_delete=models.CASCADE, default=DEFAULT_EXAM_ID)
+    challenge_starter = models.ForeignKey(User, related_name="challenge_starter", blank=True, on_delete=models.CASCADE, default=DEFAULT_USER_ID)
     peer_reviewer = models.ManyToManyField(User, related_name="peer_reviewer", blank=True)
     completed_peer_reviewer = models.ManyToManyField(User, related_name="completed_peer_reviewer", blank=True)
     uploaded_file = models.FileField(upload_to='documents/', blank=True)

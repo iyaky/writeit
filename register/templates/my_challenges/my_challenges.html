@@ -34,24 +34,30 @@
 
   {% if user.is_authenticated %}
   <div class="container main row">
-    <div class="col-3 main-bg text-white p-5">
-      <h3 class="title p-5">{{ request.user.username }}</h3>
-      <p><a href="{% url 'profile' %}">My Account</a></p>
-      <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
-      <p><a href="{% url 'my_badges' %}">My Badges</a></p>
-      <p><a href="{% url 'profile_settings' %}">Settings</a></p>
-      <p><a href="/logout">Logout</a></p>
+    <div class="col-4 main-bg text-white mt-5 container">
+      <h3 class="title pt-5 pl-5 pb-2">{{ request.user.username }}</h3>
+      <div class="container pr-1">
+        <nav class="nav-sidebar">
+          <ul>
+            <li><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
+            <li><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
+            <li><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
+            <li><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
+            <li><a class="a-sidebar" href="/logout">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
 
-    <div class="col-9 secondary-bg p-5 container">
-      <h2 class="text-center p-5">My challenges</h2>
+    <div class="col-8 secondary-bg p-5 container">
+      <h2 class="text-center pt-5">My challenges</h2>
       <div class="container">
         <div class="container">
           <div class="container">
-            <h3> <a href="{% url 'challenges' %}">Find a Challenge</a> </h3>
+            <h3> <a href="{% url 'challenges' %}" class="mt-5 button instagram w-75 a-btn small-head-text"><span class="gradient"></span>Find a Challenge</a> </h3>
           </div>
           <div class="container">
-            <h3> <a href="{% url 'choose_challenge_type' %}">Start a Challenge</a> </h3>
+            <h3> <a href="{% url 'choose_challenge_type' %}" class="mt-5 button instagram w-75 a-btn small-head-text"><span class="gradient"></span>Start a Challenge</a> </h3>
           </div>
         </div>
         <div class="container">

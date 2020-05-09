@@ -5,9 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from docx import Document
 from .forms import PlainTextChallengeForm, FileChallengeForm
+from django.contrib.auth.models import User
 from challenges.models import Challenge
 from register.models import Profile
 from badges.models import Badge
+from notification.models import Notification, NotificationType
 from django.db.models import F
 from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
@@ -61,27 +63,52 @@ def plain_text_challenge(request):
         if form.is_valid():
 
             # save new challenge
-            challenge = form.save()
 
-            # manage badges
+            challenge = form.save()
+            challenge.challenge_starter=request.user
+            # manage badges and notifications
             challenges = Challenge.objects.filter(challenge_starter=request.user)
             count = 0
             for challenge in challenges:
                 count += 1
 
-            badges = Badge.objects.get(user = request.user)
-            if count == 1 and not badges.started_one_challenge:
-                badges.started_one_challenge = True
-            elif count == 5 and not badges.started_five_challenges:
-                badges.started_five_challenges = True
-            elif count == 20 and not badges.started_twenty_challenges:
-                badges.started_twenty_challenges = True
-            elif count == 50 and not badges.started_fifty_challenges:
-                badges.started_fifty_challenges = True
-            elif count == 100 and not badges.started_one_hundred_challenges:
-                badges.started_one_hundred_challenges = True
+            badges1 = Badge.objects.get(badge_name="Started 1 challenge")
+            badges5 = Badge.objects.get(badge_name="Started 5 challenges")
+            badges20 = Badge.objects.get(badge_name="Started 20 challenges")
+            badges50 = Badge.objects.get(badge_name="Started 50 challenges")
+            badges100 = Badge.objects.get(badge_name="Started 100 challenges")
+            if count == 1 and not request.user in badges1.badge_users.all():
+                badges1.badge_users.add(request.user)
+                badges1.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 5 and not request.user in badges5.badge_users.all():
+                badges5.badge_users.add(request.user)
+                badges5.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 20 and not request.user in badges20.badge_users.all():
+                badges20.badge_users.add(request.user)
+                badges20.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 50 and not request.user in badges50.badge_users.all():
+                badges50.badge_users.add(request.user)
+                badges50.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 100 and not request.user in badges100.badge_users.all():
+                badges100.badge_users.add(request.user)
+                badges100.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
 
-            badges.save()
+
 
             # first text auto check
             text = challenge.challenge_text
@@ -124,6 +151,10 @@ def plain_text_challenge(request):
                 profile.peer_review_points = F('peer_review_points') - 1
                 profile.save()
 
+                # manage notifications
+                type = NotificationType.objects.get(name= "Create new challenge")
+                new_notification(request, request.user.id, type.id)
+
             return redirect('peer_review_others', challenge_id=challenge.id)
     else:
         form = PlainTextChallengeForm()
@@ -138,26 +169,50 @@ def file_challenge(request):
 
             # save new challenge
             challenge = form.save()
+            challenge.challenge_starter=request.user
 
-            # manage badges
+            # manage badges and notifications
             challenges = Challenge.objects.filter(challenge_starter=request.user)
             count = 0
             for i in challenges:
                 count += 1
 
-            badges = Badge.objects.get(user = request.user)
-            if count == 1 and not badges.started_one_challenge:
-                badges.started_one_challenge = True
-            elif count == 5 and not badges.started_five_challenges:
-                badges.started_five_challenges = True
-            elif count == 20 and not badges.started_twenty_challenges:
-                badges.started_twenty_challenges = True
-            elif count == 50 and not badges.started_fifty_challenges:
-                badges.started_fifty_challenges = True
-            elif count == 100 and not badges.started_one_hundred_challenges:
-                badges.started_one_hundred_challenges = True
+            badges1 = Badge.objects.get(badge_name="Started 1 challenge")
+            badges5 = Badge.objects.get(badge_name="Started 5 challenges")
+            badges20 = Badge.objects.get(badge_name="Started 20 challenges")
+            badges50 = Badge.objects.get(badge_name="Started 50 challenges")
+            badges100 = Badge.objects.get(badge_name="Started 100 challenges")
+            if count == 1 and not request.user in badges1.badge_users.all():
+                badges1.badge_users.add(request.user)
+                badges1.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 5 and not request.user in badges5.badge_users.all():
+                badges5.badge_users.add(request.user)
+                badges5.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 20 and not request.user in badges20.badge_users.all():
+                badges20.badge_users.add(request.user)
+                badges20.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 50 and not request.user in badges50.badge_users.all():
+                badges50.badge_users.add(request.user)
+                badges50.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 100 and not request.user in badges100.badge_users.all():
+                badges100.badge_users.add(request.user)
+                badges100.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
 
-            badges.save()
             challenge.save()
 
             file = Challenge.objects.get(pk=challenge.id)
@@ -275,6 +330,9 @@ def file_challenge(request):
                 challenge.save()
                 profile.peer_review_points = F('peer_review_points') - 1
                 profile.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "Create new challenge")
+                new_notification(request, request.user.id, type.id)
 
             return redirect('peer_review_others', challenge_id=challenge.id)
     else:
@@ -300,7 +358,23 @@ def challenge_accepted(request, challenge_id):
         challenge.agreed_number_of_checks = F('agreed_number_of_checks') + 1
         challenge.status = "Started"
         challenge.save()
+
+        # manage notifications
+        type = NotificationType.objects.get(name= "Accept new challenge")
+        new_notification(request, request.user.id, type.id)
+
         return redirect('challenges')
 
 
     return render(request, 'challenges/challenges.html')
+
+
+@login_required
+def new_notification(request, user_id, notification_id):
+    not_user = User.objects.get(pk=user_id)
+    type = NotificationType.objects.get(pk=notification_id)
+    not_type = type.id
+    not_text = type.not_text
+    new_notification = Notification.objects.create(to_user=not_user, type=type, notification_text=not_text)
+    new_notification.save()
+    return {'notification': new_notification}

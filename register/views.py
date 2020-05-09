@@ -16,8 +16,10 @@ from django.contrib.auth.models import User
 from .models import Profile
 from badges.models import Badge
 from challenges.models import Challenge
+from notification.models import Notification, NotificationType
 from django.core.mail import EmailMessage
 from django.db.models import F
+from challenges.views import new_notification
 
 
 def usersignup(request):
@@ -86,7 +88,12 @@ def profile(request):
     challenges = request.user.completed_peer_reviewer.all()
     for challenge in challenges:
         count += 1
-    return render(request, 'accounts/profile.html', {'profile': profile, "count": count})
+    notifications = request.user.notification_to_user.all()
+    unread_count = 0
+    for notif in notifications:
+        if not notif.read:
+            unread_count += 1
+    return render(request, 'accounts/profile.html', {'profile': profile, "count": count, "unread": unread_count})
 
 @login_required
 def settings(request):
@@ -94,15 +101,33 @@ def settings(request):
 
 @login_required
 def my_badges(request):
-    badges = Badge.objects
-    return render(request, 'my_badges/my_badges.html', {'badges': badges})
-
+    my_badges = request.user.badge_users.all()
+    not_my_badges = Badge.objects.exclude(badge_users=request.user)
+    return render(request, 'my_badges/my_badges.html', {'my_badges': my_badges, 'not_my_badges': not_my_badges})
 
 @login_required
 def my_challenges(request):
     challenges = request.user.peer_reviewer.all()
     my_challenges = request.user.challenge_starter.all()
     return render(request, 'my_challenges/my_challenges.html', {'challenges': challenges, 'my_challenges': my_challenges})
+
+@login_required
+def my_notifications(request):
+    notifications = request.user.notification_to_user.all()
+    notifications = notifications.order_by('read')
+    unread_count = 0
+    for notif in notifications:
+        if not notif.read:
+            unread_count += 1
+    return render(request, 'notifications/my_notifications.html', {'notifications': notifications, 'unread': unread_count})
+
+@login_required
+def read_all_notifications(request):
+    notifications = request.user.notification_to_user.all()
+    for notif in notifications:
+        notif.read = True
+        notif.save()
+    return redirect('my_notifications')
 
 @login_required
 def my_challenges_detail(request, challenge_id):
@@ -123,6 +148,11 @@ def complete_challenge(request, challenge_id):
                 challenge.status = "Completed"
             challenge.completed_number_of_checks = F('completed_number_of_checks') + 1
             challenge.completed_peer_reviewer.add(request.user)
+
+            # manage notifications
+            type = NotificationType.objects.get(name= "Complete challenge")
+            new_notification(request, request.user.id, type.id)
+
             form.save()
             #challenge.save()
 
@@ -130,7 +160,15 @@ def complete_challenge(request, challenge_id):
             profile = Profile.objects.get(user = request.user)
             profile.peer_review_points = F('peer_review_points') + 1
             profile.save()
+
             my_challenges = request.user.challenge_starter.all()
+            count1 = 0
+            count2 = 0
+            # count all challenges
+            for ch in my_challenges:
+                count1 += 1
+
+            # post a challenge if there are pending challenges or count challenges that are not pending
             for my_ch in my_challenges:
                 if my_ch.completed_other_challenge == False and my_ch.status == "Pending":
                     my_ch.completed_other_challenge = True
@@ -138,7 +176,18 @@ def complete_challenge(request, challenge_id):
                     my_ch.save()
                     profile.peer_review_points = F('peer_review_points') - 1
                     profile.save()
+                    # manage notifications
+                    type = NotificationType.objects.get(name= "Create new challenge")
+                    new_notification(request, request.user.id, type.id)
                     break
+                elif my_ch.completed_other_challenge:
+                    count2 += 1
+
+            # notify about new brownie point if no pending challenges were posted instead
+            if count1 == count2:
+                # manage notifications
+                type = NotificationType.objects.get(name= "New brownie point")
+                new_notification(request, request.user.id, type.id)
 
             # create results file and save to model
             if challenge.file_challenge and challenge.status == 'Completed':
@@ -169,19 +218,41 @@ def complete_challenge(request, challenge_id):
             for challenge in completed_challenges:
                 count += 1
 
-            badges = Badge.objects.get(user = request.user)
-            if count == 1 and not badges.completed_one_challenge:
-                badges.completed_one_challenge = True
-            elif count == 5 and not badges.completed_five_challenges:
-                badges.completed_five_challenges = True
-            elif count == 20 and not badges.completed_twenty_challenges:
-                badges.completed_twenty_challenges = True
-            elif count == 50 and not badges.completed_fifty_challenges:
-                badges.completed_fifty_challenges = True
-            elif count == 100 and not badges.completed_one_hundred_challenges:
-                badges.completed_one_hundred_challenges = True
-
-            badges.save()
+            badges1 = Badge.objects.get(badge_name="Completed 1 challenge")
+            badges5 = Badge.objects.get(badge_name="Completed 5 challenges")
+            badges20 = Badge.objects.get(badge_name="Completed 20 challenges")
+            badges50 = Badge.objects.get(badge_name="Completed 50 challenges")
+            badges100 = Badge.objects.get(badge_name="Completed 100 challenges")
+            if count == 1 and not request.user in badges1.badge_users.all():
+                badges1.badge_users.add(request.user)
+                badges1.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 5 and not request.user in badges5.badge_users.all():
+                badges5.badge_users.add(request.user)
+                badges5.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 20 and not request.user in badges20.badge_users.all():
+                badges20.badge_users.add(request.user)
+                badges20.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 50 and not request.user in badges50.badge_users.all():
+                badges50.badge_users.add(request.user)
+                badges50.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
+            elif count == 100 and not request.user in badges100.badge_users.all():
+                badges100.badge_users.add(request.user)
+                badges100.save()
+                # manage notifications
+                type = NotificationType.objects.get(name= "New badge")
+                new_notification(request, request.user.id, type.id)
 
             return redirect('complete_challenge', challenge_id=challenge.id)
     else:
@@ -198,6 +269,14 @@ def accept_and_close_challenge(request, challenge_id):
         if form.is_valid():
             challenge.accepted_and_closed = True
             form.save()
+            # manage notifications
+            type = NotificationType.objects.get(name= "Accept results on challenge")
+            new_notification(request, request.user.id, type.id)
+
+            users = challenge.completed_peer_reviewer.all()
+            for user in users:
+                type = NotificationType.objects.get(name= "Challenge was finished")
+                new_notification(request, user.id, type.id)
 
             return redirect('my_challenges_detail', challenge_id=challenge.id)
     else:
@@ -227,6 +306,7 @@ def dispute_and_reopen(request, challenge_id):
     #challenge.opened_dispute = True
     #challenge.save()
 
+
     return render(request, 'my_challenges/dispute_and_reopen.html', {'challenge': challenge})
 
 @login_required
@@ -244,6 +324,14 @@ def manage_dispute(request, challenge_id):
     for reviewer in completed_reviewers:
         challenge.completed_peer_reviewer.remove(reviewer)
     challenge.save()
+    # manage notifications
+    type = NotificationType.objects.get(name= "Open dispute on challenge")
+    new_notification(request, request.user.id, type.id)
+
+    users = challenge.completed_peer_reviewer.all()
+    for user in users:
+        type = NotificationType.objects.get(name= "Challenge was disputed")
+        new_notification(request, user.id, type.id)
 
     return redirect('my_challenges_detail', challenge_id=challenge.id)
 
@@ -255,6 +343,14 @@ def change_challenge(request, challenge_id):
         form = ChangeChallengeForm(request.POST, instance=challenge)
         if form.is_valid():
             form.save()
+            # manage notifications
+            type = NotificationType.objects.get(name= "Edit challenge")
+            new_notification(request, request.user.id, type.id)
+
+            users = challenge.peer_reviewer.all()
+            for user in users:
+                type = NotificationType.objects.get(name= "Challenge was edited")
+                new_notification(request, user.id, type.id)
 
             return redirect('my_challenges_detail', challenge_id=challenge.id)
     else:
@@ -265,9 +361,25 @@ def change_challenge(request, challenge_id):
 @login_required
 def delete_challenge(request, challenge_id):
     challenge = Challenge.objects.get(pk=challenge_id)
+    # manage notifications
+    users = challenge.peer_reviewer.all()
+    for user in users:
+        type = NotificationType.objects.get(name= "Challenge was deleted")
+        new_notification(request, user.id, type.id)
+
     challenge.delete()
+    # manage notifications
+    type = NotificationType.objects.get(name= "Delete challenge")
+    new_notification(request, request.user.id, type.id)
 
     return redirect('my_challenges')
+
+@login_required
+def delete_profile(request):
+    user = User.objects.get(pk=request.user.id)
+    user.delete()
+
+    return redirect('home')
 
 @login_required
 def cant_participate(request, challenge_id):

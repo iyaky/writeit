@@ -33,13 +33,12 @@
   </nav>
 
   <div class="container main row">
-    <div class="col-4 main-bg text-white pt-5">
-      <h3 class="title pt-5 pl-5 pr-3 pb-3">{{ request.user.username }}</h3>
-      {% if request.user.photo %}<img class="img-fluid img-thumbnail rounded-circle ml-5" style="min-height:150px;height:150px;" src="{{ request.user.profile.photo.url }}" alt="profile_photo">{% endif %}
-      <div class="container mt-5 pr-1">
+    <div class="col-4 main-bg text-white mt-5 container">
+      <h3 class="title pt-5 pl-5 pb-2">{{ request.user.username }}</h3>
+      <div class="container pr-1">
         <nav class="nav-sidebar">
           <ul>
-            <li><a class="a-sidebar" href="{% url 'my_notifications' %}">My Notifications</a>{% if unread > 0 %} {{ unread }} {% endif %}</li>
+            <li><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
             <li><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
             <li><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
             <li><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
@@ -50,21 +49,25 @@
     </div>
 
     <div class="col-8 secondary-bg p-5 container">
-      <h2 class="text-center p-5">Dashboard</h2>
+      <h2 class="text-center p-5">Notifications</h2>
+      <div class="container ml-2 pl-5 pb-2">
+        <form action="{% url 'read_all_notifications' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" name="cant_participate">Read all</button>
+        </form>
+      </div>
       <div class="container">
-        <div class="container">
-          <h3>Challenges</h3>
-          <p>{{ count }}</p>
-        </div>
-        <div class="container">
-          <h3>Level</h3>
-          <p>{{ profile.level }}</p>
-          <p>bar graph</p>
-        </div>
-        <div class="container">
-          <h3>Brownie points</h3>
-          <p>{{ profile.peer_review_points }}</p>
-        </div>
+        {% for notification in notifications %}
+          <div class="container">
+            {% if notification.read %}
+            <p class="pl-4">{{ notification.notification_text }}</p>
+            {% else %}
+            <ul>
+              <li><b>{{ notification.notification_text }}</b></li>
+            </ul>
+            {% endif %}
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>

@@ -230,7 +230,7 @@ h3 {
 @media only screen and (min-width: 993px) {
 
   .a-sidebar {
-    font-size: 1em;
+    font-size: 1.8em;
   }
 
   .blog-date {
@@ -258,7 +258,7 @@ h3 {
 @media only screen and (min-width: 769px) and (max-width: 992px) {
 
   .a-sidebar {
-    font-size: 1em;
+    font-size: 1.5em;
   }
 
   .blog-date {

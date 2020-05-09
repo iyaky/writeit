@@ -34,145 +34,48 @@
 
   {% if user.is_authenticated %}
   <div class="container main row">
-    <div class="col-3 main-bg text-white p-5">
-      <h6 class="title p-5">{{ request.user.username }}</h6>
-      <p><a href="{% url 'profile' %}">My Account</a></p>
-      <p><a href="{% url 'my_challenges' %}">My Challenges</a></p>
-      <p><a href="{% url 'my_badges' %}">My Badges</a></p>
-      <p><a href="{% url 'profile_settings' %}">Settings</a></p>
-      <p><a href="/logout">Logout</a></p>
+    <div class="col-4 main-bg text-white mt-5 container">
+      <h3 class="title pt-5 pl-5 pb-2">{{ request.user.username }}</h3>
+      <div class="container pr-1">
+        <nav class="nav-sidebar">
+          <ul>
+            <li><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
+            <li><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
+            <li><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
+            <li><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
+            <li><a class="a-sidebar" href="/logout">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
 
-    <div class="col-9 secondary-bg p-5 container">
+    <div class="col-8 secondary-bg p-5 container">
       <h2 class="text-center p-5">My Badges</h2>
       <div class="container">
         <div class="row">
-          {% for badge in badges.all %}
-          <div class="col-2 m-4">
-            {% if badge.first_login == True %}
-              <h6>First login</h6>
-              <p>Earned</p>
-            {% else %}
-              <h6>First login</h6>
-              <p>Pending</p>
-            {% endif %}
+          {% for badges in my_badges %}
+          <div class="container">
+            {{ badges.badge_icon.url }}
+            <p>{{ badges.badge_name }}</p>
           </div>
+          {% endfor %}
+          {% for badges in not_my_badges %}
+          <div class="container">
+            {{ badges.badge_icon_black.url }}
+            <p>Pending</p>
+          </div>
+          {% endfor %}
 
-          <div class="col-2 m-4">
-            {% if badge.completed_one_challenge == True %}
-              <h6>First completed challenge</h6>
-              <p>Earned</p>
-            {% else %}
-              <h6>First completed challenge</h6>
-              <p>Pending</p>
-            {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-            {% if badge.completed_five_challenges == True %}
-              <h6>Five completed challenges</h6>
-              <p>Earned</p>
-            {% else %}
-              <h6>Five completed challenges</h6>
-              <p>Pending</p>
-            {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-            {% if badge.completed_twenty_challenges == True %}
-              <h6>Twenty completed challenges</h6>
-              <p>Earned</p>
-            {% else %}
-              <h6>Twenty completed challenges</h6>
-              <p>Pending</p>
-            {% endif %}
-          </div>
         </div>
-
-        <div class="row">
-          <div class="col-2 m-4">
-          {% if badge.completed_fifty_challenges == True %}
-            <h6>Fifty completed challenges</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>Fifty completed challenges</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-          {% if badge.completed_one_hundred_challenges == True %}
-            <h6>A hundred completed challenges</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>A hundred completed challenges</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-          {% if badge.started_one_challenge == True %}
-            <h6>First started challenge</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>First started challenge</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-          {% if badge.started_five_challenges == True %}
-            <h6>Five started challenges</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>Five started challenges</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-2 m-4">
-          {% if badge.started_twenty_challenges == True %}
-            <h6>Twenty started challenges</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>Twenty started challenges</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-          {% if badge.started_fifty_challenges == True %}
-            <h6>Fifty started challenges</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>Fifty started challenges</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-
-          <div class="col-2 m-4">
-          {% if badge.started_one_hundred_challenges == True %}
-            <h6>A hundred started challenges</h6>
-            <p>Earned</p>
-          {% else %}
-            <h6>A hundred started challenges</h6>
-            <p>Pending</p>
-          {% endif %}
-          </div>
-        </div>
-        {% endfor %}
-
       </div>
     </div>
+    {% else %}
+    <div class="main main-bg text-white p-5">
+      <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
+      <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="main main-bg text-white p-5">
-    <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
-    <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
-  </div>
-  {% endif %}
 
   <footer class="secondary-bg p-5 text-center">
     <div class="container text-center">

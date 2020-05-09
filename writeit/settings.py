@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'notification.apps.NotificationConfig',
     'home.apps.HomeConfig',
     'register.apps.RegisterConfig',
     'challenges.apps.ChallengesConfig',
@@ -43,11 +44,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    'social_django',
+    #'social_django',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount',
+    #'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -173,9 +174,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'example@gmail.com'
-EMAIL_HOST_PASSWORD = 'lyhy exvp jugh jppc'
-EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'irynayakymets@gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'example@gmail.com'
+# EMAIL_HOST_PASSWORD = 'lyhy exvp jugh jppc'
+# EMAIL_PORT = 587
+# DEFAULT_FROM_EMAIL = 'irynayakymets@gmail.com'
