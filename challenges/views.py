@@ -15,6 +15,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
 from django.core.files import File
 from .filters import ChallengeFilter
+import datetime
 
 @login_required
 def challenges(request):
@@ -51,7 +52,8 @@ def auto_correct_text(text):
  # if cursor < text length, then add remaining text to new_text
     if cursor < len(text):
         new_text += text[cursor:]
-
+    print("djcn")
+    print(text)
     error_rate = l / len(text) * 100
     return {'new_text': new_text, 'error_rate': error_rate}
 
@@ -63,9 +65,9 @@ def plain_text_challenge(request):
         if form.is_valid():
 
             # save new challenge
-
             challenge = form.save()
             challenge.challenge_starter=request.user
+            challenge.save()
             # manage badges and notifications
             challenges = Challenge.objects.filter(challenge_starter=request.user)
             count = 0
@@ -108,7 +110,7 @@ def plain_text_challenge(request):
                 type = NotificationType.objects.get(name= "New badge")
                 new_notification(request, request.user.id, type.id)
 
-
+            challenge.save()
 
             # first text auto check
             text = challenge.challenge_text
@@ -348,7 +350,12 @@ def peer_review_others(request, challenge_id):
 @login_required
 def challenge_detail(request, challenge_id):
     challenge_detail = get_object_or_404(Challenge, pk=challenge_id)
-    return render(request, 'challenges/challenge_detail.html', {'challenge': challenge_detail})
+    now = datetime.date.today()
+    dt = challenge_detail.deadline - now
+    urgent = False
+    if dt.days <= 3:
+        urgent = True
+    return render(request, 'challenges/challenge_detail.html', {'challenge': challenge_detail, "urgent": urgent})
 
 @login_required
 def challenge_accepted(request, challenge_id):

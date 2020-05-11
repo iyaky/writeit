@@ -10,7 +10,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -32,47 +32,45 @@
     </div>
   </nav>
 
-  <div class="container main row">
-    <div class="col-4 main-bg text-white mt-5 container">
-      <h3 class="title pt-5 pl-5 pb-2">{{ request.user.username }}</h3>
-      <div class="container pr-1">
-        <nav class="nav-sidebar">
-          <ul>
-            <li><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
-            <li><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
-            <li><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
-            <li><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
-            <li><a class="a-sidebar" href="/logout">Logout</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+  <nav class="menu pt-5 mt-4" tabindex="0">
+    <div class="smartphone-menu-trigger"></div>
+    <header class="avatar">
+      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      <h2 class="text-white">{{ request.user.username }}</h2>
+    </header>
+    <ul>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </nav>
 
-    <div class="col-8 secondary-bg p-5 container">
-      <h2 class="text-center p-5">Notifications</h2>
-      <div class="container ml-2 pl-5 pb-2">
+  <main class="mb-5">
+    <h1 class="text-center mt-5 p-5">Notifications</h1>
+    <div class="container">
+      <div class="pl-2">
         <form action="{% url 'read_all_notifications' %}" method="post">
           {% csrf_token %}
-          <button type="submit" name="cant_participate">Read all</button>
+          <button class="button button-with-border mb-4 ml-4" type="submit" name="cant_participate">Read all</button>
         </form>
       </div>
-      <div class="container">
+      <div class="pl-2">
         {% for notification in notifications %}
-          <div class="container">
-            {% if notification.read %}
-            <p class="pl-4">{{ notification.notification_text }}</p>
-            {% else %}
-            <ul>
-              <li><b>{{ notification.notification_text }}</b></li>
-            </ul>
-            {% endif %}
-          </div>
+        <div class="container">
+          {% if notification.read %}
+          <p class="pl-4 notif-text">{{ notification.notification_text }}</p>
+          {% else %}
+          <p class="pl-4 notif-text"><b>{{ notification.notification_text }}</b></p>
+          {% endif %}
+        </div>
         {% endfor %}
       </div>
     </div>
-  </div>
+  </main>
 
-  <footer class="secondary-bg p-5 text-center">
+  <footer class="p-4 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

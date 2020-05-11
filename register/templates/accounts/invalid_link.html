@@ -32,19 +32,13 @@
   </nav>
 
   <main>
-    <h2 class="text-center p-5 mt-5">Reset your password</h2>
-    <div class="container">
-      <h4>
-        We've emailed you instructions for setting your password, if an account exists with the email you entered.
-        You should receive them shortly.
-      </h4>
-      <p class="form-label-text">
-        If you don't receive an email, please make sure you've entered the address you registered with,
-        and check your spam folder.
-      </p>
+    <div class="container pt-5 mt-5">
+      <h4 class="text-center">We're sorry but the link was invalid.</h4>
+      <p class='text-center'><b><a class="form-label-text-link text-center" href="{% url 'register' %}">Try again.</a></b></p>
     </div>
   </main>
-  <footer class="p-4 text-center">
+
+  <footer class="p-5 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

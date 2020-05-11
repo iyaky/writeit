@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load widget_tweaks %}
   <meta charset="utf-8">
 
   <title>Welcome to WriteIT!</title>
@@ -10,7 +11,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/challenge_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -33,48 +34,52 @@
   </nav>
 
   {% if user.is_authenticated %}
-  <div class="container main">
-
-    <div class="secondary-bg p-5 container">
-      <h2><a href="{% url 'my_challenges' %}">My Challenges</a></h2>
-
+  <main>
       {% if request.user in challenge.completed_peer_reviewer.all %}
       <div class="container">
-        <p>All done here! Thanks for doing your part!</p>
-        <a href="{% url 'my_challenges' %}">Back</a>
+        <h2 class="text-center p-5 mt-5">{{ challenge.title }}</h2>
+        <h4 class="mb-3">All done here! Thanks for doing your part!</h4>
+        <a class="button button-with-border" href="{% url 'my_challenges' %}">Back</a>
       </div>
+
       {% else %}
+      <h2 class="text-center p-5 mt-5">{{ challenge.title }}</h2>
       <div class="container">
-        <h3>{{ challenge.title }}</h3>
-        <p>Due {{ challenge.deadline }}</p>
-        <p>Short description - {{ challenge.short_description }}</p>
-        <p>Additional information - {{ challenge.notes }}</p>
-        {% if challenge.peer_review_text == Null %}<p>Text - {{ challenge.auto_check_text }}</p>
-        {% else %}<p>Text - {{ challenge.peer_review_text }}</p>{% endif %}
-        <p>Additional information - {{ challenge.notes }}</p>
+        <div class="container filter-box">
+          <div>
+            <p class="detail-challenge-text">Due <b>{{ challenge.deadline }}</b></p>
+          </div>
+            <div>
+              <h4>Short description</h4>
+              <p class="detail-challenge-text">{{ challenge.short_description }}</p>
+            </div>
+            {% if challenge.notes != "" %}
+            <div>
+              <h4>Additional information</h4>
+              <p class="detail-challenge-text">{{ challenge.notes }}</p>
+            </div>
+            {% endif %}
+            <div>
+              <h4>Text</h4>
+              {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text">{{ challenge.auto_check_text }}</p>
+              {% else %}<p class="detail-challenge-text">{{ challenge.peer_review_text }}</p>{% endif %}
+            </div>
+        </div>
 
         <form  method="POST" class="container form-group" enctype = "multipart/form-data">
           {% csrf_token %}
-          {% for field in form %}
-          <div class="mb-2">
-            <label class="">{{ field.label }}</label>
-            <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
-            {% if field.errors %}
-            {% for error in field.errors %}
-            <p  class="reg-field-error">{{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            {% endfor %}
+          <div class="form-group">
+            <h4 class="form-label-text mb-2">Type your text in here.</h4>
+            {% render_field form.peer_review_text class="form-control" %}
           </div>
-          <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Challenge completed!</button>
+
+          <button onclick="return confirm('Are you sure you want to submit these changes?')" type="submit" class="button button-with-border mr-2 mt-4">Challenge completed!</button>
+          <a class="button button-with-border" href="{% url 'my_challenges' %}">Back</a>
         </form>
-        <a href="{% url 'my_challenges' %}">Back</a>
+
       </div>
       {% endif %}
-
-
-  </div>
-</div>
+</main>
 {% else %}
 <div class="main main-bg text-white p-5">
   <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
@@ -82,7 +87,7 @@
 </div>
 {% endif %}
 
-<footer class="secondary-bg p-5 text-center">
+<footer class="p-4 mt-4 text-center">
   <div class="container text-center">
     <p>© Iryna Yakymets {% now "Y" %}</p>
   </div>

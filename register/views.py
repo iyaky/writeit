@@ -1,5 +1,5 @@
 import os, io
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -20,6 +20,7 @@ from notification.models import Notification, NotificationType
 from django.core.mail import EmailMessage
 from django.db.models import F
 from challenges.views import new_notification
+import datetime
 
 
 def usersignup(request):
@@ -40,10 +41,11 @@ def usersignup(request):
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(email_subject, message, to=[to_email])
             email.send()
-            return HttpResponse('We have sent you an email, please confirm your email address to complete registration')
+            return HttpResponseRedirect('sent_link')
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
+
 
 def activate_account(request, uidb64, token):
     try:
@@ -55,9 +57,20 @@ def activate_account(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse('Your account has been activated successfully!')
+        return HttpResponseRedirect('successful_registration')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponseRedirect('invalid_link')
+
+
+def sent_link(request):
+    return render(request, 'accounts/sent_link.html')
+
+def successful_registration(request, uidb64, token):
+    return render(request, 'accounts/successful_registration.html')
+
+def invalid_link(request, uidb64, token):
+    return render(request, 'accounts/invalid_link.html')
+
 
 @login_required
 def change_settings(request):
@@ -132,7 +145,12 @@ def read_all_notifications(request):
 @login_required
 def my_challenges_detail(request, challenge_id):
     my_challenges_detail = get_object_or_404(Challenge, pk=challenge_id)
-    return render(request, 'my_challenges/my_challenges_detail.html', {'challenge': my_challenges_detail})
+    now = datetime.date.today()
+    dt = my_challenges_detail.deadline - now
+    urgent = False
+    if dt.days <= 3:
+        urgent = True
+    return render(request, 'my_challenges/my_challenges_detail.html', {'challenge': my_challenges_detail, "urgent":urgent})
 
 
 @login_required
@@ -385,5 +403,7 @@ def delete_profile(request):
 def cant_participate(request, challenge_id):
     challenge = Challenge.objects.get(pk=challenge_id)
     challenge.peer_reviewer.remove(request.user)
+    challenge.agreed_number_of_checks = F('agreed_number_of_checks') - 1
+    challenge.save()
 
     return redirect('my_challenges')

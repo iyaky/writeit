@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load widget_tweaks %}
   <meta charset="utf-8">
 
   <title>Welcome to WriteIT!</title>
@@ -10,7 +11,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/challenge_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -33,27 +34,23 @@
   </nav>
 
 
-    <div class="secondary-bg p-5 container">
-      <h2 class="text-center p-5">Congrats on getting a challenge completed!</h2>
-      <p>Please, leave some feedback about your experience. We'd love to hear your thoughts.</p>
-      <form  method="POST" class="container form-group" enctype = "multipart/form-data">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="mb-2">
-          <label class="">{{ field.label }}</label>
-          <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
-          {% if field.errors %}
-          {% for error in field.errors %}
-          <p  class="reg-field-error">{{ error }}</p>
-          {% endfor %}
-          {% endif %}
-          {% endfor %}
-        </div>
-        <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Leave feedback!</button>
-      </form>
-    </div>
+    <main>
+      <h2 class="text-center p-5 mt-5">{{ challenge.title }}</h2>
+      <div class="container">
+        <h4 class="ml-3">Congrats on getting a challenge completed!</h4>
+        <h4 class="ml-3 mb-4">Please, leave some feedback about your experience. We'd love to hear your thoughts.</h4>
+        <form  method="POST" class="container form-group" enctype = "multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            {% render_field form.feedback class="form-control" %}
+          </div>
+          <button type="submit" class="button button-with-border mr-2">Leave feedback!</button>
+          <a class="button button-with-border" href="{% url 'my_challenges' %}">Back</a>
+        </form>
+      </div>
+    </main>
 
-  <footer class="secondary-bg p-5 text-center">
+  <footer class="p-4 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

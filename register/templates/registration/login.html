@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load widget_tweaks %}
   <meta charset="utf-8">
 
   <title>Welcome to WriteIT!</title>
@@ -10,7 +11,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/challenge_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -31,15 +32,15 @@
     </div>
   </nav>
 
-  <div class="main-bg text-white p-5 w-100">
-    <h2 class="pt-5 pb-3 text-center">Log into your account</h2>
+  <main>
+    <h2 class="text-center p-5 mt-5">Log into your account</h2>
     <div class="container">
       <form method="POST" class="container form-group">
         {% csrf_token %}
         {% for field in form %}
-        <div class="mb-2">
-          <label class="reg-label d-flex justify-content-center">{{ field.label }}</label>
-          <div class="d-flex justify-content-center "><span class="reg-field">{{ field }}</span></div>
+        <div class="mb-4">
+          <h4 class="form-label-text"><b><label class="reg-label d-flex justify-content-center">{{ field.label }}</label></b></h4>
+          <div class="d-flex justify-content-center"><span class="reg-field">{{ field }}</span></div>
           {% if field.errors %}
             {% for error in field.errors %}
               <p  class="reg-field-error d-flex justify-content-center">{{ error }}</p>
@@ -47,17 +48,23 @@
           {% endif %}
         </div>
         {% endfor %}
-        <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Log in!</button>
+        <div class="container d-flex justify-content-center">
+          <button type="submit" class="mt-3 button button-with-border d-flex justify-content-center">Log in!</button>
+        </div>
+
       </form>
 
-      <a href="{% url 'password_reset' %}">Forgot password?</a>
       <div class="container d-flex justify-content-center">
-        <p>Don't have an account? <a href="{% url 'register' %}">Register!</a></p>
+        <p class="form-label-text"><a class="form-label-text-link" href="{% url 'password_reset' %}">Forgot password?</a></p>
+      </div>
+
+      <div class="container d-flex justify-content-center">
+        <p class="form-label-text">Don't have an account? <a class="form-label-text-link" href="{% url 'register' %}">Register!</a></p>
       </div>
 
     </div>
-  </div>
-  <footer class="secondary-bg p-5 text-center">
+  </main>
+  <footer class="p-5 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

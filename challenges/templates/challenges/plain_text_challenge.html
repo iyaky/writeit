@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load widget_tweaks %}
   <meta charset="utf-8">
 
   <title>Welcome to WriteIT!</title>
@@ -10,7 +11,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/challenge_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -33,29 +34,56 @@
   </nav>
 
 
-  <div class="main-bg text-white pt-5 container">
-    <h2 class="text-center p-5">Start a Challenge</h2>
+  <main class="blue-background pb-5">
+    <h2 class="text-center p-5 mt-5 text-white">Start a plain text challenge</h2>
     <div class="container">
       <form method="POST" class="container form-group" enctype = "multipart/form-data">
         {% csrf_token %}
-        {% for field in form %}
-          <div class="mb-2">
-            <label class="reg-label">{{ field.label }}</label>
-            <div class="d-flex"><span class="reg-field">{{ field }}</span></div>
-            {% if field.errors %}
-              {% for error in field.errors %}
-              <p  class="reg-field-error">{{ error }}</p>
-              {% endfor %}
-            {% endif %}
+        <div class="form-group">
+          <p>Title</p>
+          {% render_field form.title class="form-control" %}
+          {% if form.title.field.errors %}
+          {% for error in form.title.field.errors %}
+          <p  class="reg-field-error">{{ error }}</p>
+          {% endfor %}
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <p>Topic</p>
+          {% render_field form.topic class="form-control" %}
+        </div>
+        <div class="form-group">
+          <p>Short description <span>(?)</span></p>
+          {% render_field form.short_description class="form-control" %}
+        </div>
+        <div class="form-group">
+          <p>Number of checks <span>(?)</span></p>
+          {% render_field form.number_of_checks class="form-control" %}
+        </div>
+        <div class="form-group">
+          <p>Deadline</p>
+          {% render_field form.deadline class="form-control" %}
+        </div>
+        <div class="form-group">
+          <p>Challenge text <span>(?)</span></p>
+          {% render_field form.challenge_text class="form-control" %}
+        </div>
+        <div class="form-group">
+          <p>Notes <span>(?)</span></p>
+          {% render_field form.notes class="form-control" %}
+        </div>
+        <div class="container">
+          <div class="row">
+            <button type="submit" class="col mt-5 button button-with-border">Create!</button>
+            <a href="{% url 'challenges' %}" class="col mt-5 button button-with-border">Cancel</a>
           </div>
-        {% endfor %}
-        <button type="submit" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Create!</button>
+        </div>
       </form>
-      <a href="{% url 'challenges' %}" class="mt-5 button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Cancel</a>
-    </div>
-  </div>
 
-  <footer class="secondary-bg p-5 text-center">
+    </div>
+  </main>
+
+  <footer class="p-4 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

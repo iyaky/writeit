@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     #url('', views.usersignup, name='register_user'),
+    path("sent_link/", views.sent_link, name="sent_link"),
     url('profile/',views.profile, name='profile'),
     url('settings/', views.settings, name='profile_settings'),
     url('change_settings', views.change_settings, name='change_settings'),

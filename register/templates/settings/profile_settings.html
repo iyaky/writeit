@@ -10,7 +10,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -32,85 +32,78 @@
     </div>
   </nav>
 
-  <div class="container main row">
-    <div class="col-4 main-bg text-white mt-5 container">
-      <h3 class="title pt-5 pl-5 pb-2">{{ request.user.username }}</h3>
-      <div class="container pr-1">
-        <nav class="nav-sidebar">
-          <ul>
-            <li><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
-            <li><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
-            <li><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
-            <li><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
-            <li><a class="a-sidebar" href="/logout">Logout</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+  <nav class="menu pt-5 mt-4" tabindex="0">
+    <div class="smartphone-menu-trigger"></div>
+    <header class="avatar">
+      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      <h2 class="text-white">{{ request.user.username }}</h2>
+    </header>
+    <ul>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
+      <li tabindex="0"><a class="a-sidebar active-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </nav>
 
-    <div class="col-8 secondary-bg p-5 container">
-      <h2 class="text-center p-5">Settings</h2>
+  <main class="mb-5">
+    <h1 class="text-center mt-5 p-5">Settings</h1>
+    <div class="pl-2">
       <div class="container">
-        <div class="container">
-          <h3>Profile Details</h3>
-          <div class="container">
-            <h5>Username</h5>
-            <p>{{request.user.username}}</p>
-          </div>
-          <div class="container">
-            <h5>Name</h5>
-            {% if requst.user.first_name == Null %}
-            <p>First name</p>
-            <p>Nothing here yet!</p>
-            {% else %}
-              <p>First name</p>
-              <p>{{request.user.first_name}}</p>
-            {% endif %}
-            {% if requst.user.last_name == Null %}
-            <p>Last name</p>
-            <p>Nothing here yet!</p>
-            {% else %}
-              <p>Last name</p>
-              <p>{{request.user.last_name}}</p>
-            {% endif %}
-          </div>
-          <div class="container">
-            <h5>Profile Picture</h5>
-            {% if requst.user.photo %}
-            <img class="img-fluid" style="min-height:170px;height:170px;" src="{{ request.user.profile.photo.url }}" alt="profile_photo">
-            {% endif %}
-          </div>
-          <div class="container">
-            <h5>Bio</h5>
-            <p>{{request.user.profile.bio}}</p>
-          </div>
-          <div class="container">
-            <h5>Email</h5>
-            <p>{{request.user.email}}</p>
-          </div>
-          <div class="container">
-            <h5>Location</h5>
-            <p>{{request.user.profile.country}}</p>
-          </div>
-        </div>
-        <div class="container">
-          <a href="{% url 'change_settings' %}" class="mt-5 button instagram w-100 a-btn small-head-text"><span class="gradient"></span>Update profile settings</a>
-          <h4 class="mt-4">Delete Profile</h4>
-          <a onclick="return confirm('Are you sure you want to delete this?')" href="{% url 'delete_profile' %}">Delete profile</a>
-        </div>
+        <h3>Username</h3>
+        <p class="main-text">{{request.user.username}}</p>
+      </div>
+      <div class="container">
+        <h3>Name</h3>
+        {% if requst.user.first_name == Null %}
+        <p class="main-text">First name</p>
+        <p class="main-text">Nothing here yet!</p>
+        {% else %}
+        <p class="main-text">First name</p>
+        <p class="main-text">{{request.user.first_name}}</p>
+        {% endif %}
+        {% if requst.user.last_name == Null %}
+        <p class="main-text">Last name</p>
+        <p class="main-text">Nothing here yet!</p>
+        {% else %}
+        <p class="main-text">Last name</p>
+        <p class="main-text">{{request.user.last_name}}</p>
+        {% endif %}
+      </div>
+      <div class="container">
+        <h3>Profile Picture</h3>
+        {% if request.user.profile.photo %}
+        <img class="img-fluid" src="{{ request.user.profile.photo.url }}" alt="profile_photo">
+        {% endif %}
+      </div>
+      <div class="container">
+        <h3>Bio</h3>
+        <p class="main-text">{{request.user.profile.bio}}</p>
+      </div>
+      <div class="container">
+        <h3>Email</h3>
+        <p class="main-text">{{request.user.email}}</p>
+      </div>
+      <div class="container">
+        <h3>Location</h3>
+        <p class="main-text">{{request.user.profile.country}}</p>
+      </div>
+      <div class="container">
+        <a class="button button-with-border mb-4" href="{% url 'change_settings' %}">Update profile settings</a>
+        <div><a class="button button-with-border mb-4" onclick="return confirm('Are you sure you want to delete this?')" href="{% url 'delete_profile' %}">Delete profile</a></div>
       </div>
     </div>
-  </div>
-
-  <footer class="secondary-bg text-center">
-    <div class="container text-center">
-      <p>© Iryna Yakymets {% now "Y" %}</p>
-    </div>
-  </footer>
-
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-
+  </main>
 </body>
+
+<footer class="p-4 text-center">
+  <div class="container text-center">
+    <p>© Iryna Yakymets {% now "Y" %}</p>
+  </div>
+</footer>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>

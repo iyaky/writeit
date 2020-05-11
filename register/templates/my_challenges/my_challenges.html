@@ -10,7 +10,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -33,117 +33,118 @@
   </nav>
 
   {% if user.is_authenticated %}
-  <div class="container main row">
-    <div class="col-4 main-bg text-white mt-5 container">
-      <h3 class="title pt-5 pl-5 pb-2">{{ request.user.username }}</h3>
-      <div class="container pr-1">
-        <nav class="nav-sidebar">
-          <ul>
-            <li><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
-            <li><a class="a-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
-            <li><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
-            <li><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
-            <li><a class="a-sidebar" href="/logout">Logout</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
+  <nav class="menu pt-5 mt-4" tabindex="0">
+    <div class="smartphone-menu-trigger"></div>
+    <header class="avatar">
+      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      <h2 class="text-white">{{ request.user.username }}</h2>
+    </header>
+    <ul>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'profile' %}">My Account</a></li>
+      <li tabindex="0"><a class="a-sidebar active-sidebar" href="{% url 'my_challenges' %}">My Challenges</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'my_badges' %}">My Badges</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'profile_settings' %}">Settings</a></li>
+      <li tabindex="0"><a class="a-sidebar" href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </nav>
 
-    <div class="col-8 secondary-bg p-5 container">
-      <h2 class="text-center pt-5">My challenges</h2>
+  <main class="mb-5">
+    <h1 class="text-center mt-5 p-5">My challenges</h1>
+    <div class="pl-2">
       <div class="container">
         <div class="container">
-          <div class="container">
-            <h3> <a href="{% url 'challenges' %}" class="mt-5 button instagram w-75 a-btn small-head-text"><span class="gradient"></span>Find a Challenge</a> </h3>
-          </div>
-          <div class="container">
-            <h3> <a href="{% url 'choose_challenge_type' %}" class="mt-5 button instagram w-75 a-btn small-head-text"><span class="gradient"></span>Start a Challenge</a> </h3>
+          <div class="row">
+            <a href="{% url 'challenges' %}" class="col button button-with-border mb-4">Find a challenge</a>
+            <a href="{% url 'choose_challenge_type' %}" class="col button button-with-border mb-4">Start a challenge</a>
           </div>
         </div>
         <div class="container">
           <h3>My challenges</h3>
-          <h4>In progress</h4>
+          <h4 class="main-text">In progress</h4>
           {% for challenge in my_challenges.all %}
-            {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
-
-                <div class="container">
-                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
-                </div>
-            {% endif %}
+          {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
+          <div class="container mb-2">
+            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+          </div>
+          {% endif %}
           {% endfor %}
-          <h4>Pending</h4>
-          {% for challenge in my_challenges.all %}
-            {% if challenge.challenge_starter == request.user and challenge.status == "Pending" and challenge.completed_other_challenge %}
 
-                <div class="container">
-                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
-                </div>
-            {% endif %}
+          <h4 class="main-text">Pending</h4>
+          {% for challenge in my_challenges.all %}
+          {% if challenge.challenge_starter == request.user and challenge.status == "Pending" and challenge.completed_other_challenge %}
+          <div class="container mb-2">
+            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+          </div>
+          {% endif %}
           {% endfor %}
-          <h4>Completed</h4>
-          {% for challenge in my_challenges.all %}
-            {% if challenge.challenge_starter == request.user and challenge.status == "Completed" %}
 
-                <div class="container">
-                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
-                </div>
-            {% endif %}
+          <h4 class="main-text">Completed</h4>
+          {% for challenge in my_challenges.all %}
+          {% if challenge.challenge_starter == request.user and challenge.status == "Completed" %}
+          <div class="container mb-2">
+            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+          </div>
+          {% endif %}
           {% endfor %}
         </div>
+
+
+
         <div class="container">
           <h3>Current challenges</h3>
-          <h4>Pending</h4>
+          <h4 class="main-text">Pending</h4>
           {% for challenge in challenges.all %}
-            {% if challenge.status == "Started" %}
-              {% if not request.user in challenge.completed_peer_reviewer.all %}
-                <div class="container">
-                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
-                </div>
-              {% endif %}
-            {% endif %}
+          {% if challenge.status == "Started" %}
+          {% if not request.user in challenge.completed_peer_reviewer.all %}
+          <div class="container mb-2">
+            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+          </div>
+          {% endif %}
+          {% endif %}
           {% endfor %}
 
-          <h4>Completed</h4>
+          <h4 class="main-text">Completed</h4>
           {% for challenge in challenges.all %}
-            {% if challenge.status == "Started" %}
-              {% if request.user in challenge.completed_peer_reviewer.all %}
-                <div class="container">
-                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
-                </div>
-              {% endif %}
-            {% endif %}
+          {% if challenge.status == "Started" %}
+          {% if request.user in challenge.completed_peer_reviewer.all %}
+          <div class="container mb-2">
+            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+          </div>
+          {% endif %}
+          {% endif %}
           {% endfor %}
         </div>
+
+
+
         <div class="container">
           <h3>Completed challenges</h3>
           {% for challenge in challenges.all %}
-            {% if challenge.status == "Completed" %}
-
-                <div class="container">
-                  <a href="{% url 'my_challenges_detail' challenge.id %}"><p class="card-header">{{ challenge.title }}</p></a>
-                </div>
-            {% endif %}
+          {% if challenge.status == "Completed" %}
+          <div class="container mb-2">
+            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+          </div>
+          {% endif %}
           {% endfor %}
         </div>
       </div>
-    </div>
-  </div>
-  {% else %}
-  <div class="main main-bg text-white p-5">
-    <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
-    <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
-  </div>
-  {% endif %}
+      {% else %}
+      <div class="pl-2">
+        <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
+        <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
+      </div>
+      {% endif %}
+    </main>
 
-  <footer class="secondary-bg p-5 text-center">
-    <div class="container text-center">
-      <p>© Iryna Yakymets {% now "Y" %}</p>
-    </div>
-  </footer>
+    <footer class="p-4 text-center">
+      <div class="container text-center">
+        <p>© Iryna Yakymets {% now "Y" %}</p>
+      </div>
+    </footer>
 
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
-</body>
+  </body>

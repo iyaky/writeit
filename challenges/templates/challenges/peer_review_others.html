@@ -10,7 +10,7 @@
   <meta name="author" content="Iryna Yakymets">
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/challenge_pages.css' %}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
@@ -33,24 +33,28 @@
   </nav>
 
 
-  <div class="main-bg text-white pt-5 container">
-    <h2 class="text-center p-5">Congrats on starting a challenge!</h2>
-    <h4 class="text-center p-5">We'll get it started right away.</h4>
-    <div class="container">
-        {% csrf_token %}
+  <main>
+    <h2 class="text-center p-5 mt-5">Congrats on starting a challenge!</h2>
+    <div class="choose-type-container container">
         {% if challenge.completed_other_challenge == False %}
-          <h4>but first...</h4>
-          <p>Complete a different user's challenge. They'll help you faster if you help them!</p>
-          <a href="{% url 'my_challenges' %}">Take me to the challenges!</a>
+        <div class="choose-challenge-box p-2 mr-3">
+          <h4 class="mb-3">We'll get it started right away, but first...</h4>
+          <img src="{% static 'challenge_types/other-challenge-not-completed.svg' %}" height="200" />
+          <p class="detail-challenge-text mt-3">Complete a different user's challenge. They'll help you faster if you help them!</p>
+          <h4><a class="secondary-link" href="{% url 'my_challenges' %}">Take me to the challenges!</a></h4>
+        </div>
         {% else %}
-          <h4>You're in luck!</h4>
-          <p>You don't have to complete any challenges to post this one. This one's on us.</p>
-          <a href="{% url 'my_challenges' %}">My challenges</a>
+        <div class="choose-challenge-box p-2 mr-3">
+          <h4 class="mb-3">You're in luck!</h4>
+          <img src="{% static 'challenge_types/other-challenge-completed.svg' %}" height="200" />
+          <p class="detail-challenge-text mt-3">You don't have to complete any challenges to post this one. This one's on us!</p>
+          <h4><a class="secondary-link" href="{% url 'my_challenges' %}">Great, thanks!</a></h4>
+        </div>
         {% endif %}
     </div>
-  </div>
+  </main>
 
-  <footer class="secondary-bg p-5 text-center">
+  <footer class="p-4 mt-4 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>

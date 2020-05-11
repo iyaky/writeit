@@ -31,6 +31,7 @@ urlpatterns = [
     path('', home.views.home, name='home'),
     path('about/', include('home.urls')),
     path("register/", register.views.usersignup, name="register"),
+    path("register/sent_link/", register.views.sent_link, name="sent_link"),
     path("login/", register.views.login, name="login"),
     #url('accounts/', include('social_django.urls', namespace='social')),
     path('accounts/', include('register.urls')),
@@ -40,6 +41,8 @@ urlpatterns = [
     path('file_challenge/', challenges.views.file_challenge, name='file_challenge'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         register.views.activate_account, name='activate'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/successful_registration/$', register.views.successful_registration, name="successful_registration"),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/invalid_link/$', register.views.invalid_link, name="invalid_link"),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

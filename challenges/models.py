@@ -19,7 +19,7 @@ class Challenge(models.Model):
     title = models.CharField(max_length=30, blank=False)
     status = models.CharField(max_length=30, blank=True)
     topic = models.ForeignKey(ChallengeTopicName, related_name="topic", blank=False, on_delete=models.SET_DEFAULT, default=DEFAULT_EXAM_ID)
-    short_description = models.CharField(max_length=500, blank=False, help_text='Please provide a short description of the challenge.')
+    short_description = models.TextField(blank=False, help_text='Please provide a short description of the challenge.')
     number_of_checks = models.PositiveSmallIntegerField(blank=False, default=0, help_text='How many reviews do you want this challenge to go through?')
     agreed_number_of_checks = models.PositiveSmallIntegerField(blank=False, default=0)
     completed_number_of_checks = models.PositiveSmallIntegerField(blank=False, default=0)
