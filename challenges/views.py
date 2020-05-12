@@ -4,9 +4,9 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from docx import Document
-from .forms import PlainTextChallengeForm, FileChallengeForm
+from .forms import PlainTextChallengeForm, FileChallengeForm, FilterForm
 from django.contrib.auth.models import User
-from challenges.models import Challenge
+from challenges.models import Challenge, ChallengeTopicName
 from register.models import Profile
 from badges.models import Badge
 from notification.models import Notification, NotificationType
@@ -22,6 +22,11 @@ def challenges(request):
     all_challenges = Challenge.objects.all()
     challenge_filter = ChallengeFilter(request.GET, queryset=all_challenges)
     return render(request, 'challenges/challenges.html', {'filter': challenge_filter})
+    # if request.method == 'GET':
+    #     form = FilterForm(request.GET)
+    # else:
+    #     form = FilterForm()
+    # return render(request, 'challenges/challenges.html', {'form': form, 'challenges': all_challenges})
 
 @login_required
 def choose_challenge_type(request):

@@ -16,6 +16,54 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
 
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script>
+  $( function() {
+            $( "#id_deadline" ).datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true
+            });
+        });
+  </script>
+
+  <style>
+
+  div#tips a  {
+    font-size: 1.5rem;
+  }
+  div#tips a:hover {
+    text-decoration: none;
+  }
+  div#tips a span {display: none;}
+  div#tips a:hover span {
+    display: block;
+    position: absolute;
+    width: 200px;
+    padding: 5px;
+    margin: 2px;
+    z-index: 100;
+    color: #112861;
+    background: #f2f7fc;
+    font-family:"Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #112861;
+    font-size: 0.5em;
+    text-decoration: none;
+    border: 1px solid #112861;
+    text-decoration: none;
+  }
+  div#tips p {position:relative}
+  </style>
+
 </head>
 
 <body class="h-100 w-100">
@@ -34,44 +82,74 @@
   </nav>
 
 
-  <main class="blue-background pb-5">
-    <h2 class="text-center p-5 mt-5 text-white">Start a file challenge</h2>
-    <div class="container">
+  <main>
+    <h2 class="text-center p-5 mt-5">Start a file challenge</h2>
+    <div class="container" id="tips">
       <form method="POST" class="container form-group" enctype = "multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-          <p>Title</p>
+          <p class="form-label-text">Title</p>
           {% render_field form.title class="form-control" %}
           {% if form.title.field.errors %}
             {% for error in form.title.field.errors %}
-            <p  class="reg-field-error">{{ error }}</p>
+              <p  class="form-label-text">{{ error }}</p>
             {% endfor %}
           {% endif %}
         </div>
         <div class="form-group">
-          <p>Topic</p>
+          <p class="form-label-text">Topic</p>
           {% render_field form.topic class="form-control" %}
+          {% if form.topic.field.errors %}
+            {% for error in form.topic.field.errors %}
+              <p  class="form-label-text">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
         <div class="form-group">
-          <p>Short description <span>(?)</span></p>
+          <p><span class="form-label-text">Short desctiption</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Provide a description for the challenge.</span></a></p>
           {% render_field form.short_description class="form-control" %}
+          {% if form.short_description.field.errors %}
+            {% for error in form.short_description.field.errors %}
+              <p  class="form-label-text">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
         <div class="form-group">
-          <p>Number of checks <span>(?)</span></p>
+          <p><span class="form-label-text">Number of checks</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Provide the number of users that should check this text. If 0, only auto-check will be conducted.</span></a></p>
           {% render_field form.number_of_checks class="form-control" %}
+          {% if form.number_of_checks.field.errors %}
+            {% for error in form.number_of_checks.field.errors %}
+              <p  class="form-label-text">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
         <div class="form-group">
-          <p>Deadline</p>
+          <p class="form-label-text">Deadline</p>
           {% render_field form.deadline class="form-control" %}
+          {% if form.deadline.field.errors %}
+            {% for error in form.deadline.field.errors %}
+              <p  class="form-label-text">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
         <div class="form-group">
-          <p>File <span>(?)</span></p>
-          <p>Please make sure the file is either a .txt or a .docx. Also, we strongly recommend that all .docx files should include text with minimum styles applied!</p>
+          <p><span class="form-label-text">File</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Provide the file with the challenge text.</span></a></p>
+          <p class="form-label-text"><b>Please make sure the file is either a .txt or a .docx. Also, we strongly recommend that all .docx files should include text with minimum styles applied!</b></p>
           {% render_field form.uploaded_file class="form-control" %}
+          {% if form.uploaded_file.field.errors %}
+            {% for error in form.uploaded_file.field.errors %}
+              <p  class="form-label-text">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
         <div class="form-group">
-          <p>Notes <span>(?)</span></p>
+          <p><span class="form-label-text">Notes</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Provide any additional information you deem necessary.</span></a></p>
           {% render_field form.notes class="form-control" %}
+          {% if form.notes.field.errors %}
+            {% for error in form.notes.field.errors %}
+              <p  class="form-label-text">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
         </div>
         <div class="container">
           <div class="row">
@@ -83,16 +161,10 @@
     </div>
   </main>
 
-  <footer class="p-4 text-center">
+  <footer class="p-4 mt-4 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>
   </footer>
-
-
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
 </body>

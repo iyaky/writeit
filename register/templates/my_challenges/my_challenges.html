@@ -36,7 +36,7 @@
   <nav class="menu pt-5 mt-4" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
     <header class="avatar">
-      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      {% if request.user.profile.photo %}<img class="image" src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
       <h2 class="text-white">{{ request.user.username }}</h2>
     </header>
     <ul>
@@ -49,102 +49,158 @@
   </nav>
 
   <main class="mb-5">
-    <h1 class="text-center mt-5 p-5">My challenges</h1>
-    <div class="pl-2">
+    <div class="container pl-5">
+      <h1 class="text-center mt-5 p-5">My challenges</h1>
       <div class="container">
-        <div class="container">
-          <div class="row">
-            <a href="{% url 'challenges' %}" class="col button button-with-border mb-4">Find a challenge</a>
-            <a href="{% url 'choose_challenge_type' %}" class="col button button-with-border mb-4">Start a challenge</a>
-          </div>
-        </div>
-        <div class="container">
-          <h3>My challenges</h3>
-          <h4 class="main-text">In progress</h4>
-          {% for challenge in my_challenges.all %}
-          {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
-          <div class="container mb-2">
-            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
-          </div>
-          {% endif %}
-          {% endfor %}
-
-          <h4 class="main-text">Pending</h4>
-          {% for challenge in my_challenges.all %}
-          {% if challenge.challenge_starter == request.user and challenge.status == "Pending" and challenge.completed_other_challenge %}
-          <div class="container mb-2">
-            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
-          </div>
-          {% endif %}
-          {% endfor %}
-
-          <h4 class="main-text">Completed</h4>
-          {% for challenge in my_challenges.all %}
-          {% if challenge.challenge_starter == request.user and challenge.status == "Completed" %}
-          <div class="container mb-2">
-            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
-          </div>
-          {% endif %}
-          {% endfor %}
-        </div>
-
-
-
-        <div class="container">
-          <h3>Current challenges</h3>
-          <h4 class="main-text">Pending</h4>
-          {% for challenge in challenges.all %}
-          {% if challenge.status == "Started" %}
-          {% if not request.user in challenge.completed_peer_reviewer.all %}
-          <div class="container mb-2">
-            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
-          </div>
-          {% endif %}
-          {% endif %}
-          {% endfor %}
-
-          <h4 class="main-text">Completed</h4>
-          {% for challenge in challenges.all %}
-          {% if challenge.status == "Started" %}
-          {% if request.user in challenge.completed_peer_reviewer.all %}
-          <div class="container mb-2">
-            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
-          </div>
-          {% endif %}
-          {% endif %}
-          {% endfor %}
-        </div>
-
-
-
-        <div class="container">
-          <h3>Completed challenges</h3>
-          {% for challenge in challenges.all %}
-          {% if challenge.status == "Completed" %}
-          <div class="container mb-2">
-            <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
-          </div>
-          {% endif %}
-          {% endfor %}
+        <div class="row">
+          <a href="{% url 'challenges' %}" class="col button button-with-border mb-4">Find a challenge</a>
+          <a href="{% url 'choose_challenge_type' %}" class="col button button-with-border mb-4">Start a challenge</a>
         </div>
       </div>
-      {% else %}
-      <div class="pl-2">
-        <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
-        <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
+      <!--Accordion wrapper-->
+      <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+        <!-- Accordion card -->
+        <div>
+
+          <!-- Card header -->
+          <div role="tab" id="headingOne1">
+              <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true"
+              aria-controls="collapseOne1">
+              <h3 class="mb-0">
+                My challenges <i class="fas fa-angle-down rotate-icon"></i>
+              </h3>
+            </a>
+          </div>
+
+          <!-- Card body -->
+          <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+            <div>
+              <h4>Pending</h4>
+              {% for challenge in my_challenges.all %}
+              {% if challenge.challenge_starter == request.user and challenge.status == "Pending" %}
+              <div class="container mb-2">
+                <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+              </div>
+              {% endif %}
+              {% endfor %}
+
+              <h4>In progress</h4>
+              {% for challenge in my_challenges.all %}
+              {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
+              <div class="container mb-2">
+                <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+              </div>
+              {% endif %}
+              {% endfor %}
+
+              <h4>Completed</h4>
+              {% for challenge in my_challenges.all %}
+              {% if challenge.challenge_starter == request.user and challenge.status == "Completed" %}
+              <div class="container mb-2">
+                <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+        <!-- Accordion card -->
+
+        <!-- Accordion card -->
+        <div>
+
+          <!-- Card header -->
+          <div role="tab" id="headingTwo2">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+            aria-expanded="false" aria-controls="collapseTwo2">
+              <h3 class="mb-0">
+                Current challenges <i class="fas fa-angle-down rotate-icon"></i>
+              </h3>
+            </a>
+          </div>
+
+          <!-- Card body -->
+          <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2" data-parent="#accordionEx">
+            <div>
+              <h4>Pending</h4>
+              {% for challenge in challenges.all %}
+              {% if challenge.status == "Started" %}
+              {% if not request.user in challenge.completed_peer_reviewer.all %}
+              <div class="container mb-2">
+                <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+              </div>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+
+              <h4>Completed</h4>
+              {% for challenge in challenges.all %}
+              {% if challenge.status == "Started" %}
+              {% if request.user in challenge.completed_peer_reviewer.all %}
+              <div class="container mb-2">
+                <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+              </div>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+        <!-- Accordion card -->
+
+        <!-- Accordion card -->
+        <div>
+
+          <!-- Card header -->
+          <div role="tab" id="headingThree3">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseThree3"
+            aria-expanded="false" aria-controls="collapseThree3">
+              <h3 class="mb-0">
+                Completed challenges <i class="fas fa-angle-down rotate-icon"></i>
+              </h3>
+            </a>
+          </div>
+
+          <!-- Card body -->
+          <div id="collapseThree3" class="collapse" role="tabpanel" aria-labelledby="headingThree3" data-parent="#accordionEx">
+            <div>
+              {% for challenge in challenges.all %}
+              {% if challenge.status == "Completed" %}
+              <div class="container mb-2">
+                <p class="card-header challenge-title-box"><a  class="challenge-title" href="{% url 'my_challenges_detail' challenge.id %}">{{ challenge.title }}</a></p>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+        <!-- Accordion card -->
+
       </div>
-      {% endif %}
-    </main>
+      <!-- Accordion wrapper -->
+  </div>
 
-    <footer class="p-4 text-center">
-      <div class="container text-center">
-        <p>© Iryna Yakymets {% now "Y" %}</p>
-      </div>
-    </footer>
+{% else %}
+<div class="pl-2">
+  <h2 class="mt-5 pt-5 mb-5 text-center">Please, log into your account.</h2>
+  <a href="{% url 'login' %}" class="col button instagram w-25 a-btn small-head-text"><span class="gradient"></span>Login</a>
+</div>
+{% endif %}
+</main>
 
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<footer class="p-4 text-center">
+  <div class="container text-center">
+    <p>© Iryna Yakymets {% now "Y" %}</p>
+  </div>
+</footer>
 
-  </body>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+</body>

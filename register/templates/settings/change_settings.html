@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
   {% load static %}
+  {% load widget_tweaks %}
   <meta charset="utf-8">
 
   <title>Welcome to WriteIT!</title>
@@ -35,7 +36,7 @@
   <nav class="menu pt-5 mt-4" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
     <header class="avatar">
-      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      {% if request.user.profile.photo %}<img class="image" src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
       <h2 class="text-white">{{ request.user.username }}</h2>
     </header>
     <ul>
@@ -53,27 +54,23 @@
       <form method="POST" class="container form-group" enctype = "multipart/form-data">
         {% csrf_token %}
         {% for field in u_form %}
-        <div class="mb-2">
-          <label class="main-text">{{ field.label }}</label>
-          <div class="d-flex"><span class="main-text">{{ field }}</span></div>
-          {% if field.errors %}
-          {% for error in field.errors %}
-          <p class="main-text">{{ error }}</p>
-          {% endfor %}
-          {% endif %}
+        <div class="form-group">
+          <p class="form-label-text">{{ field.label_tag }}</p>
+          {% render_field field class="form-control" %}
         </div>
         {% endfor %}
-        {% for field in p_form %}
-        <div class="mb-2">
-          <label class="main-text">{{ field.label }}</label>
-          <div class="d-flex"><span class="main-text">{{ field }}</span></div>
-          {% if field.errors %}
-          {% for error in field.errors %}
-          <p class="main-text">{{ error }}</p>
-          {% endfor %}
-          {% endif %}
+        <div class="form-group">
+          <p class="form-label-text">Bio</p>
+          {% render_field p_form.bio class="form-control" %}
         </div>
-        {% endfor %}
+        <div class="form-group">
+          <p class="form-label-text">Country</p>
+          {% render_field p_form.country class="form-control" %}
+        </div>
+        <div class="form-group form-label-text">
+          <p class="form-label-text">Photo</p>
+          {% render_field p_form.photo class="form-control" %}
+        </div>
         <button class="button button-with-border mb-4" type="submit">Save!</button>
       </form>
     </div>

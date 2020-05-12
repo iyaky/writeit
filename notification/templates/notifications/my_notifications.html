@@ -35,7 +35,7 @@
   <nav class="menu pt-5 mt-4" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
     <header class="avatar">
-      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      {% if request.user.profile.photo %}<img class="image" src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
       <h2 class="text-white">{{ request.user.username }}</h2>
     </header>
     <ul>

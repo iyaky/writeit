@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'widget_tweaks',
+
+    'bootstrap4',
     #'social_django',
     'allauth',
     'allauth.account',
@@ -155,6 +157,11 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 

@@ -14,6 +14,67 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script>
+  $(document).ready(function(){
+    var maxLength = 300;
+    $(".show-read-more").each(function(){
+      var myStr = $(this).text();
+      if($.trim(myStr).length > maxLength){
+        var newStr = myStr.substring(0, maxLength);
+        var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+        $(this).empty().html(newStr);
+        $(this).append(' <a href="javascript:void(0);" class="read-more"> read more...</a>');
+        $(this).append('<span class="more-text">' + removedStr + '</span>');
+      }
+    });
+    $(".read-more").click(function(){
+      $(this).siblings(".more-text").contents().unwrap();
+      $(this).remove();
+    });
+  });
+  </script>
+
+  <style>
+  .show-read-more .more-text{
+    display: none;
+  }
+
+  .h4-like{
+    font-size: 1.5rem;
+    color: #112861;
+    margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
+  }
+
+  div#tips a  {
+    font-size: 1.5rem;
+  }
+  div#tips a:hover {
+    text-decoration: none;
+  }
+  div#tips a span {display: none;}
+  div#tips a:hover span {
+    display: block;
+    position: absolute;
+    left: 20%;
+    width: 200px;
+    padding: 5px;
+    margin: 2px;
+    z-index: 100;
+    color: #112861;
+    background: #f2f7fc;
+    font-family:"Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #112861;
+    font-size: 0.5em;
+    text-decoration: none;
+    border: 1px solid #112861;
+    text-decoration: none;
+  }
+  div#tips p {position:relative}
+  </style>
 
 </head>
 
@@ -36,7 +97,7 @@
   <main>
     {% if challenge.challenge_starter == request.user and challenge.status == "Started" %}
     <h1 class="text-center mt-5 p-5">{{ challenge.title }}</h1>
-    <div class="container">
+    <div class="container" id="tips">
       <div class="container filter-box">
         <div class="mb-3">
           <span class="detail-challenge-topic">{{ challenge.topic }}</span>
@@ -56,8 +117,8 @@
         </div>
         <div>
           <h4>Text</h4>
-          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text">{{ challenge.auto_check_text }}</p>
-          {% else %}<p class="detail-challenge-text">{{ challenge.peer_review_text }}</p>{% endif %}
+          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text show-read-more">{{ challenge.auto_check_text }}</p>
+          {% else %}<p class="detail-challenge-text show-read-more">{{ challenge.peer_review_text }}</p>{% endif %}
         </div>
         {% if challenge.notes != "" %}
         <div>
@@ -75,11 +136,19 @@
 
     {% elif challenge.challenge_starter == request.user and challenge.status == "Pending" %}
     <h1 class="text-center mt-5 p-5">{{ challenge.title }}</h1>
-    <div class="container">
+    <div class="container" id="tips">
       <div class="container filter-box">
         <div class="mb-3">
           <span class="detail-challenge-topic">{{ challenge.topic }}</span>
           {% if urgent %}<span class="detail-challenge-deadline-urgent ml-3">{{ challenge.deadline }}</span>{% else %}<span class="detail-challenge-deadline-plain ml-3">{{ challenge.deadline }}</span>{% endif %}
+        </div>
+        <div>
+          <p><span class="h4-like">Used brownie points</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>If yes, then your challenge is posted. If no, please complete a challenge to get it posted.</span></a></p>
+          <p class="detail-challenge-text">{% if challenge.completed_other_challenge %}Yes{% else %}No{% endif %}</p>
+        </div>
+        <div>
+          <h4>Number of agreed checks</h4>
+          <p class="detail-challenge-text">{{ challenge.agreed_number_of_checks }}/{{ challenge.number_of_checks }}</p>
         </div>
         <div>
           <h4>Short description</h4>
@@ -87,8 +156,8 @@
         </div>
         <div>
           <h4>Text</h4>
-          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text">{{ challenge.auto_check_text }}</p>
-          {% else %}<p class="detail-challenge-text">{{ challenge.peer_review_text }}</p>{% endif %}
+          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text show-read-more">{{ challenge.auto_check_text }}</p>
+          {% else %}<p class="detail-challenge-text show-read-more">{{ challenge.peer_review_text }}</p>{% endif %}
         </div>
         {% if challenge.notes != "" %}
         <div>
@@ -97,6 +166,7 @@
         </div>
         {% endif %}
         <h4>Thank you for starting a challenge! We'll make sure it's completed as soon as possible.</h4>
+        <a class="button button-with-border" href="{% url 'change_challenge' challenge.id %}">Change challenge</a>
         <a class="button button-with-border"  onclick="return confirm('Are you sure you want to delete this challenge?')" href="{% url 'delete_challenge' challenge.id %}">Delete challenge</a>
       </div>
       <h4><a class="secondary-link" href="{% url 'my_challenges' %}">Back to my challenges</a></h4>
@@ -106,7 +176,7 @@
 
     {% elif challenge.challenge_starter == request.user and challenge.status == "Completed" %}
     <h1 class="text-center mt-5 p-5">{{ challenge.title }}</h1>
-    <div class="container">
+    <div class="container" id="tips">
       <div class="container filter-box">
         <div class="mb-3">
           <span class="detail-challenge-topic">{{ challenge.topic }}</span>
@@ -123,8 +193,8 @@
         {% else %}
         <div>
           <h4>Text</h4>
-          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text">{{ challenge.auto_check_text }}</p>
-          {% else %}<p class="detail-challenge-text">{{ challenge.peer_review_text }}</p>{% endif %}
+          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text show-read-more">{{ challenge.auto_check_text }}</p>
+          {% else %}<p class="detail-challenge-text show-read-more">{{ challenge.peer_review_text }}</p>{% endif %}
         </div>
         {% endif %}
         {% if challenge.feedback == "" %}
@@ -148,7 +218,7 @@
 
     {% elif challenge.status == "Started" %}
     <h1 class="text-center mt-5 p-5">{{ challenge.title }}</h1>
-    <div class="container">
+    <div class="container" id="tips">
       <div class="container filter-box">
         <div class="mb-3">
           <span class="detail-challenge-topic">{{ challenge.topic }}</span>
@@ -164,8 +234,8 @@
         </div>
         <div>
           <h4>Text</h4>
-          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text">{{ challenge.auto_check_text }}</p>
-          {% else %}<p class="detail-challenge-text">{{ challenge.peer_review_text }}</p>{% endif %}
+          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text show-read-more">{{ challenge.auto_check_text }}</p>
+          {% else %}<p class="detail-challenge-text show-read-more">{{ challenge.peer_review_text }}</p>{% endif %}
         </div>
         {% if challenge.notes != "" %}
         <div>
@@ -194,7 +264,7 @@
 
     {% elif challenge.status == "Completed" %}
     <h1 class="text-center mt-5 p-5">{{ challenge.title }}</h1>
-    <div class="container">
+    <div class="container" id="tips">
       <div class="container filter-box">
         <div class="mb-3">
           <span class="detail-challenge-topic">{{ challenge.topic }}</span>
@@ -206,8 +276,8 @@
         </div>
         <div>
           <h4>Text</h4>
-          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text">{{ challenge.auto_check_text }}</p>
-          {% else %}<p class="detail-challenge-text">{{ challenge.peer_review_text }}</p>{% endif %}
+          {% if challenge.peer_review_text == Null %}<p class="detail-challenge-text show-read-more">{{ challenge.auto_check_text }}</p>
+          {% else %}<p class="detail-challenge-text show-read-more">{{ challenge.peer_review_text }}</p>{% endif %}
         </div>
         <div>
           <h4>Thanks for helping us complete the challenge!</h4>

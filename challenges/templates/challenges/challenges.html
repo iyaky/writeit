@@ -15,6 +15,54 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
 
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script>
+  $( function() {
+            $( "#id_deadline" ).datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true
+            });
+        });
+  </script>
+
+
+  <style type="text/css" media="screen">
+  div#tips a  {
+    font-size: 25px;
+  }
+  div#tips a:hover {
+    text-decoration: none;
+  }
+  div#tips a span {display: none;}
+  div#tips a:hover span {
+    display: block;
+    position: absolute;
+    left: 20%;
+    width: 200px;
+    padding: 5px;
+    margin: 2px;
+    z-index: 100;
+    color: #112861;
+    background: #f2f7fc;
+    font-family:"Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+    color: #112861;
+    font-size: 0.5em;
+    text-decoration: none;
+    border: 1px solid #112861;
+    text-decoration: none;
+  }
+  div#tips p {position:relative}
+  </style>
 
 </head>
 
@@ -35,34 +83,33 @@
 
   <main>
     <h1 class="text-center  mt-5 p-5">Challenges</h1>
+
     <div class="container text-center">
       <a class="button button-with-border mb-4 ml-5" href="{% url 'choose_challenge_type' %}">Start a challenge</a>
       <a class="button button-with-border mb-4" href="{% url 'my_challenges' %}">My challenges</a>
     </div>
+
     <div class="container filter-box filter-text">
       <form method="get">
         <h3 class="mb-4">Filter</h3>
-        <div class="row">
-          <div class="form-group col-sm-4 col-md-3">
-            <p>Topic <span>(?)</span></p>
+        <div class="row" id="tips">
+          <div class="form-group col-sm-4 col-md-4">
+            <p><span>Topic</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Display challenges that correspond with the chosen topic(s).</span></a></p>
             {% render_field filter.form.topic class="form-control" %}
           </div>
-          <div class="form-group col-sm-4 col-md-3">
-            <p>Checks <span>(?)</span></p>
+          <div class="form-group col-sm-4 col-md-4">
+            <p><span>Checks</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Display challenges that have this amount of necessary checks or less.</span></a></p>
             {% render_field filter.form.number_of_checks class="form-control" %}
           </div>
-          <div class="form-group col-sm-4 col-md-3">
-            <p>Deadline <span>(?)</span></p>
+          <div class="form-group col-sm-4 col-md-4">
+            <p><span>Deadline</span><a href="#"> <img src="{% static 'other/information.svg' %}" width="15px"> <span>Display challenges that need to be completed up to this deadilne.</span></a></p>
             {% render_field filter.form.deadline class="form-control" %}
           </div>
-          <div class="form-group col-sm-4 col-md-3">
-            <p>File challenge <span>(?)</span></p>
-            {% render_field filter.form.is_file_challenge class="form-control" %}
-          </div>
         </div>
-        <button class="button button-with-border mb-4 mt-2" type="submit">Search</button>
+        <button class="button button-with-border mb-2 mt-2" type="submit">Search</button>
       </form>
     </div>
+
     <div class="container">
       {% for challenge in filter.qs %}
       {% if challenge.agreed_number_of_checks < challenge.number_of_checks and challenge.completed_other_challenge and challenge.challenge_starter != request.user and not request.user in challenge.peer_reviewer.all %}
@@ -78,16 +125,13 @@
       {% endif %}
       {% endfor %}
     </div>
+    
   </main>
+
   <footer class="p-4 mt-4 text-center">
     <div class="container text-center">
       <p>© Iryna Yakymets {% now "Y" %}</p>
     </div>
   </footer>
-
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
 </body>

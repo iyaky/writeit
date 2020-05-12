@@ -36,7 +36,7 @@
   <nav class="menu pt-5 mt-4" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
     <header class="avatar">
-      {% if request.user.profile.photo %}<img src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
+      {% if request.user.profile.photo %}<img class="image" src="{{ request.user.profile.photo.url }}" alt="profile_photo" />{% endif %}
       <h2 class="text-white">{{ request.user.username }}</h2>
     </header>
     <ul>
@@ -51,21 +51,39 @@
   <main class="mb-5">
     <h1 class="text-center mt-5 p-5">My Badges</h1>
     <div class="pl-2">
-      <div class="row">
         {% for badges in my_badges %}
-        <div class="container">
-          {{ badges.badge_icon.url }}
-          <p class="main-text">{{ badges.badge_name }}</p>
-        </div>
-        {% endfor %}
-        {% for badges in not_my_badges %}
-        <div class="container">
-          {{ badges.badge_icon_black.url }}
-          <p class="main-text">Pending</p>
-        </div>
+          {% if forloop.first %}<div class="row">{% endif %}
+          <div class="container choose-type-container col-4 mb-3">
+            <img src="{{ badges.badge_icon.url }}" height="170px" alt="profile_photo" />
+            <h4>{{ badges.badge_name }}</h4>
+          </div>
+          {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+          {% if forloop.last %}</div>{% endif %}
         {% endfor %}
 
-      </div>
+        {% for badges in not_my_badges %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="container choose-type-container col-4 mb-3">
+          <img src="{{ badges.badge_icon_black.url }}" height="170px" alt="profile_photo" />
+          <h4>Pending</h4>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+        {% if forloop.last %}</div>{% endif %}
+        {% endfor %}
+
+        <!-- {% for badges in my_badges %}
+        <div class="container choose-type-container">
+          <img src="{{ badges.badge_icon.url }}" height="170px" alt="profile_photo" />
+          <h4>{{ badges.badge_name }}</h4>
+        </div>
+        {% endfor %} -->
+        <!-- {% for badges in not_my_badges %}
+        <div class="container choose-type-container">
+          <img src="{{ badges.badge_icon_black.url }}" height="170px" alt="profile_photo" />
+          <h4>Pending</h4>
+        </div>
+        {% endfor %} -->
+
     </div>
     {% else %}
     <div class="pl-2">
